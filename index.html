@@ -1,0 +1,120 @@
+<html>
+<head>
+	<title>Blaster</title>
+	<script src="mousemove.js"></script>
+	<script src="player.js"></script>
+	<script src="bullet.js"></script>
+    <script src="enemy.js"></script>
+    <script src="eb.js"></script>
+    <script src="tree.js"></script>
+</head>
+<body>
+        <canvas id="blaster" width="1000" height="1000"></canvas>
+<script>
+    //var DrawX = 0;
+    //var DrawY = 0;
+    //var time = 0;
+    var width = 1000; // canvas.width;
+    var height = 1000; //  canvas.height;
+    var offTop = 0; // canvas.offsetTop;
+    var offLeft = 0; // canvas.offsetLeft;
+    var rectWidth = 15;
+    var rectHeight = 15;
+    //var speed = 1000; // REAL BULLET SPEED
+    var x = width / 2;
+    var y = height / 2;
+    var counter = 0;
+
+    var up = false;
+    var down = false;
+    var left = false;
+    var right = false;
+
+    window.addEventListener("keydown", moveSomething, false);
+ 
+    function moveSomething(e) {
+    switch(e.keyCode) {
+        case 38:
+        up = true;
+            // up
+            break;
+        case 40:
+        down = true;
+            // down
+            break;
+        case 37:
+        left = true;
+            // left
+            break;
+        case 39:
+        right = true;
+            // right
+            break;  
+        }   
+    }
+
+    //var speed = 1000;
+    //var size = 5;
+    //var id = 0;
+    //var bulletId = 0;
+
+    var canvas = document.getElementById('blaster');
+    canvas.addEventListener("mousemove", setMousePosition, false);
+    canvas.addEventListener("mousedown", getPosition, false);
+
+    function play()
+    {
+    //compatability            
+    //var requestAnimationFrame = window.requestAnimationFrame || //Chromium 
+    //window.webkitRequestAnimationFrame || //Webkit
+    //window.mozRequestAnimationFrame || //Mozilla Geko
+    //window.oRequestAnimationFrame || //Opera Presto
+    //window.msRequestAnimationFrame || //IE Trident?
+
+    function callback(timestamp)
+    {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            counter+=1;
+            //clearBullet();
+            clearEb();
+            clearEnemy();
+            clearPlayer();
+            drawEnemy();
+            drawEb();
+            if (counter == 150)
+            {
+                for (i = 0; i < enemyRoster.length; i++) {
+                    if (!enemyRoster[i].hasBeenHit) {
+                        addEb("blue", 5, -2, enemyRoster[i].x, enemyRoster[i].y);
+                    }
+                }
+                counter = 0;
+            }
+            drawPlayer();
+            drawBullet()
+            drawTree();
+            window.requestAnimationFrame(callback);
+    };
+
+    //addPlayer("green", size, width / 2 - 50, height / 2);
+    addPlayer("red", 15, width / 2 , height / 2);
+    addEnemy("blue", 15, width / 2+200, height / 3 - 300);
+    addEnemy("blue", 15, width / 2 + 500, height / 3 + 300);
+    addTree(100,100,50,500);
+    addTree(100,100,100,100);
+    addTree(100,100,500,500);
+    addTree(100,100,300,800);
+    addTree(100,100,300,90);
+    addTree(100,100,900,500);
+    addTree(100,100,900,900);
+    addTree(100,100,100,800);
+    addTree(100,100,800,100);
+    addTree(100,100,500,700);
+    window.requestAnimationFrame(callback);
+    };
+
+    play();
+</script>
+</body>
+</html>
