@@ -98,6 +98,11 @@ var enemyID = 0;
     //    $.each(playerRoster, function (index, currentPlayer)
         enemyRoster.forEach( function (currentEnemy)
         {
+            if (enemyRoster.length == 0)
+            {
+                document.write("you win!");
+            }
+            
             updateEnemy(currentEnemy, playerRoster[0]);
             DrawX = currentEnemy.x;
             DrawY = currentEnemy.y;
