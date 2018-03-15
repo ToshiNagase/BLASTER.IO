@@ -96,9 +96,14 @@ var enemyID = 0;
     function drawEnemy()
     {
     //    $.each(playerRoster, function (index, currentPlayer)
+        var counter = 0;
         enemyRoster.forEach( function (currentEnemy)
         {
-            if (enemyRoster.length == 0)
+            if (currentEnemy.hasBeenHit)
+            {
+                counter++;
+            }
+            if (counter == enemyRoster.length)
             {
                 document.write("you win!");
             }
