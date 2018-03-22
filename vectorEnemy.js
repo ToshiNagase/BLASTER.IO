@@ -242,7 +242,7 @@ var enemyID = 0;
                 ctx.fillRect(0, 0, 1000, 1000);
             }*/
         });
-
+// Hello world
 
 
     }
