@@ -1,6 +1,9 @@
 //var playerHasBeenHit = false;    
 var playerID = 0;
 
+var maxSpeed = 2;
+
+var friction = 0.98;
     function player(id, color, size, x, y, speed) {
         this.id = id;
         this.color = color;
@@ -9,6 +12,8 @@ var playerID = 0;
         this.mapX = x;
         this.mapY = y;
         this.y = height / 2;
+        this.xVel = 0;
+        this.yVel = 0;
         this.speed = speed;
         this.playerHasBeenHit = false;
     }
@@ -23,22 +28,63 @@ var playerID = 0;
     {
         // Latest code
         if(up){
-            player.y -= 8;
-            up = false;
+            if (player.yVel > -maxSpeed) {
+                player.yVel --;
+                up = false;
+            }
         }
         if(down){
-            player.y += 8;
-            down = false;
+            if (player.yVel < maxSpeed) {
+                player.yVel ++;
+                down = false;
+            }
         }
         if(left){
-            player.x -= 8;
-            left = false;
+            if (player.xVel > -maxSpeed) {
+                player.xVel --;
+                left = false;
+            }
         }
         if(right){
-            player.x += 8;
-            right = false;
+            if (player.xVel < maxSpeed) {
+                player.xVel ++;
+                right = false;
+            }
         }
-
+        if(player.xVel > maxSpeed) {
+            player.xVel = maxSpeed;
+        }
+        if (player.xVel < - maxSpeed) {
+            player.xVel = -maxSpeed;
+        }
+        if (player.yVel > maxSpeed) {
+            player.yVel = maxSpeed;
+        }
+        if (player.yVel < -maxSpeed) {
+            player.yVel = -maxSpeed;
+        }
+        player.xVel *= friction;
+        player.yVel *= friction;
+        player.y += player.yVel;
+        
+        player.x += player.xVel;
+        if (player.y > window.innerHeight) {
+            player.y = window.innerHeight;
+            player.yVel = 0;
+        }
+        else if (player.y < 0) {
+            player.y = 0;
+            player.yVel = 0;
+        }
+        if (player.x > window.innerWidth) {
+            player.x = window.innerWidth;
+            player.xVel = 0;
+        }
+        else if (player.x < 0) {
+            player.x = 0;
+            player.xVel = 0;
+        }
+        
     }
 
     function playerCheckIsHit(eb, currentPlayer) {
@@ -50,7 +96,7 @@ var playerID = 0;
                      currentPlayer.playerHasBeenHit = true;
                      //ebRoster.splice(bullet.bulletID, 1);
                      eb.hasHit = true;
-                     document.write("you dead");
+                     window.alert("you dead");
                 }
             }
     }

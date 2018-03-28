@@ -55,7 +55,12 @@ var enemyID = 0;
             dx = playerx;
             dy = playery;
         }
-        
+        if (enemy.x > (window.innerWidth - 10) || enemy.x < 10) {
+            dx = 0;
+        }
+        if (enemy.y > (window.innerHeight - 10) || enemy.y < 10) {
+            dy = 0;
+        }
         var mag = Math.sqrt(dx*dx+dy*dy);
 
         //if (mag > 33)
@@ -105,7 +110,7 @@ var enemyID = 0;
             }
             if (counter == enemyRoster.length)
             {
-                document.write("you win!");
+                window.alert("you win!");
             }
             
             updateEnemy(currentEnemy, playerRoster[0]);
