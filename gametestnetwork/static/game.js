@@ -4,31 +4,16 @@ var socket = io();
 //console.log(data);
 //});
 
-socket.on('name', function(data)
-{
+socket.on('name', function(data) {
   // data is a parameter containing whatever data was sent
 });
 
-var movement =
-{
+var movement = {
   up: false,
   down: false,
   left: false,
   right: false
 }
-
-var shot =
-{
-  mouseX: 0,
-  mouseY: 0
-}
-
-function setMousePosition(e) 
-{
-  shot.mouseX = e.clientX;
-  shot.mouseY = e.clientY;
-}
-
 document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
     case 65: // A
@@ -45,7 +30,6 @@ document.addEventListener('keydown', function(event) {
       break;
   }
 });
-
 document.addEventListener('keyup', function(event) {
   switch (event.keyCode) {
     case 65: // A
@@ -64,7 +48,6 @@ document.addEventListener('keyup', function(event) {
 });
 
 socket.emit('new player');
-
 setInterval(function() {
   socket.emit('movement', movement);
 }, 1000 / 60);
@@ -74,15 +57,12 @@ setInterval(function() {
 var canvas = document.getElementById('canvas');
 canvas.width = 800;
 canvas.height = 600;
-canvas.addEventListener("mousemove", setMousePosition, false);
-canvas.addEventListener("mousedown", socket.emit('new bullet'), false);
 
 var context = canvas.getContext('2d');
 
 socket.on('state', function(players) {
   context.clearRect(0, 0, 800, 600);
   context.fillStyle = 'red';
-
   for (var id in players) {
     var player = players[id];
     context.beginPath();
@@ -91,14 +71,5 @@ socket.on('state', function(players) {
     context.lineWidth = 3;
     context.strokeStyle = '#FF0000';
     context.stroke();
-  }
-});
-
-socket.on('state', function(bullets) {
-
-  for (var id in bullets) {
-    var bullet = bullets[id];
-    context.fillStyle = '#FF0000';
-    context.fillRect(bullet.x, bullet.y, 5, 5);
   }
 });

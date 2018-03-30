@@ -4,8 +4,6 @@ var http = require('http');
 var path = require('path');
 var socketIO = require('socket.io');
 
-var bulletID = 0;
-
 var app = express();
 var server = http.Server(app);
 var io = socketIO(server);
@@ -25,13 +23,8 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 });
 
-setInterval(function() {
-  io.sockets.emit('message', 'hi!');
-}, 1000);
-
+//Player
 var players = {};
-var bullets = {};
-
 io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
@@ -39,7 +32,7 @@ io.on('connection', function(socket) {
       y: 300
     };
   });
-
+  
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
     if (data.left) {
@@ -55,35 +48,9 @@ io.on('connection', function(socket) {
       player.y += 5;
     }
   });
-
-  socket.on('new bullet', function(data) {
-    bullets[bulletID] = {
-      x: players[socket.id].x,
-      y: players[socket.id].y,
-      bulletID++;
-    };
-  });
-
-  /*socket.on('shot', function(data) {
-    var player = players[socket.id] || {};
-    if (data.left) {
-      player.x -= 5;
-    }
-    if (data.up) {
-      player.y -= 5;
-    }
-    if (data.right) {
-      player.x += 5;
-    }
-    if (data.down) {
-      player.y += 5;
-    }
-  });*/
 });
 
 setInterval(function() {
   io.sockets.emit('
   ', players); // Inifinite loop
 }, 1000 / 60);
-
-
