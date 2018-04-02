@@ -23,4 +23,7 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 });
 
+const myModule = require('./playerserver');
+myModule.playerServer()
+
 
