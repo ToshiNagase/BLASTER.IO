@@ -1,5 +1,5 @@
 module.exports = {
-playerServer: function()
+/*playerServer: function()
 {
   var players = {};
   io.on('connection', function(socket) {
@@ -26,9 +26,32 @@ playerServer: function()
       }
     });
   });
+}
+}*/
 
-  setInterval(function() {
-    io.sockets.emit('state', players); // Inifinite loop
-  }, 1000 / 60);
+newPlayer: function(socket, players)
+{
+  players[socket.id] = {
+    x: 300,
+    y: 300
+  };
+},
+
+//module.exports = 
+playerMove: function(data, players)
+{
+  var player = players[socket.id] || {};
+      if (data.left) {
+        player.x -= 5;
+      }
+      if (data.up) {
+        player.y -= 5;
+      }
+      if (data.right) {
+        player.x += 5;
+      }
+      if (data.down) {
+        player.y += 5;
+      }
 }
 }
