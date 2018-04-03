@@ -94,8 +94,7 @@ io.on('connection', function(socket) {
 });
 
 setInterval(function() {
-  io.sockets.emit('
-  ', players); // Inifinite loop
+  io.sockets.emit('state', players); // Inifinite loop
 }, 1000 / 60);
 
 
