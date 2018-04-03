@@ -30,10 +30,12 @@ var enemyID = 0;
         var dx;
         var dy;
         var slope;
+        playerDistance = Math.sqrt((enemy.x - player.xPos) * (enemy.x - player.xPos) +(enemy.y - player.yPos) * (enemy.y - player.yPos));;
         if (bulletRoster.length > 0) {
             var bulletx = bulletRoster[0].xPos - enemy.x;
             var bullety = bulletRoster[0].yPos - enemy.y;
             slope = bulletRoster[0].dy / bulletRoster[0].dx;
+            playerDistance = Math.sqrt((enemy.x - player.xPos) * (enemy.x - player.xPos) +(enemy.y - player.yPos) * (enemy.y - player.yPos));
             for (i = 0; i < bulletRoster.length; i++) {
                 if (bulletRoster[i] != null && !bulletRoster[i].hasHit && (bulletRoster[i].xPos - enemy.x)*(bulletRoster[i].xPos - enemy.x)+(bulletRoster[i].yPos - enemy.y)*(bulletRoster[i].yPos - enemy.y)<bulletx*bulletx+bullety*bullety) {
                     bulletx = bulletRoster[i].xPos - enemy.x;
@@ -55,12 +57,16 @@ var enemyID = 0;
             dx = playerx;
             dy = playery;
         }
-        if (enemy.x > (window.innerWidth - 10) || enemy.x < 10) {
+        if (playerDistance > 0) {
+            dx = playerx;
+            dy = playery;
+        }
+        /*if (enemy.x > (window.innerWidth - 100) || enemy.x < 100) {
             dx = 0;
         }
-        if (enemy.y > (window.innerHeight - 10) || enemy.y < 10) {
+        if (enemy.y > (window.innerHeight - 100) || enemy.y < 100) {
             dy = 0;
-        }
+        }*/
         var mag = Math.sqrt(dx*dx+dy*dy);
 
         //if (mag > 33)
@@ -111,6 +117,7 @@ var enemyID = 0;
             if (counter == enemyRoster.length)
             {
                 window.alert("you win!");
+                exit();
             }
             
             updateEnemy(currentEnemy, playerRoster[0]);

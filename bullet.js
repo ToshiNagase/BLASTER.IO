@@ -19,6 +19,7 @@ function bullet(id, color, size, speed, xPos, yPos, mouseX, mouseY)
         this.dy = this.dy / mag * this.speed;
         this.xOrigin = xPos;
         this.yOrigin = yPos;
+        this.hasReflect = false;
 	//this.velX = velX;
 	//this.velY = velY;
 }
@@ -30,17 +31,9 @@ function addBullet(color,rSize,rSpeed,rxPos,ryPos,rmouseX,rmouseY)
 }
 
 function updateBullet(bullet, player)
-{
-	var dx = (bullet.mousex - player.x);
-	var dy = (bullet.mousey - player.y);
-	var mag = Math.sqrt(dx*dx+dy*dy);
-	//var theta = Math.atan(dy/dx);
-	//var velX = Math.cos(theta) * bullet.speed;
-    //var velY = Math.sin(theta) * bullet.speed;
-    var velX = (dx/mag) * bullet.speed;
-    var velY = (dy/mag) * bullet.speed;    
-    bullet.xPos = velX + bullet.xPos;
-    bullet.yPos = velY + bullet.yPos;
+{   
+    bullet.xPos = bullet.dx + bullet.xPos;
+    bullet.yPos = bullet.dy + bullet.yPos;
         //bullet.yPos = 30 + bullet.yPos;
         //bullet.xPos = 30 + bullet.xPos;
 }

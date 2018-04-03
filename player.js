@@ -97,6 +97,7 @@ var friction = 0.98;
                      //ebRoster.splice(bullet.bulletID, 1);
                      eb.hasHit = true;
                      window.alert("you dead");
+                     exit();
                 }
             }
     }

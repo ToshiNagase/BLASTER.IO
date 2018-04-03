@@ -14,6 +14,7 @@ function eb(id, color, size, speed, xPos, yPos)
     this.initY = yPos;
     this.dx = 0;
     this.dy = 0;
+    this.hasReflect = false;
 }
 
 function addEb(color,rSize,rSpeed,rxPos,ryPos)
@@ -24,11 +25,9 @@ function addEb(color,rSize,rSpeed,rxPos,ryPos)
 
 function updateEb(eb, player)
 {
-	var dx = (eb.initX - player.x);
-    this.dx = dx;
-	var dy = (eb.initY - player.y);
-    this.dy = dy;
-	var mag = Math.sqrt(dx*dx+dy*dy);
+    dx = eb.initX - player.x;
+    dy = eb.initY - player.y;
+	var mag = Math.sqrt(dx * dx + dy * dy);
 
     var velX = (dx/mag) * eb.speed;
     var velY = (dy/mag) * eb.speed;    
@@ -42,6 +41,7 @@ function drawEb()
     {
         if (currentEb.hasHit == false) {
             updateEb(currentEb, playerRoster[0], enemyRoster[0]);
+            
             var canvas = document.getElementById('blaster');
             if (!canvas.getContext) return;
             var ctx = canvas.getContext('2d');
