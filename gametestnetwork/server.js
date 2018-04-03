@@ -48,6 +48,8 @@ var app = express();
 var server = http.Server(app);
 var io = socketIO(server);
 
+const myModule = require('./playerserver');
+
 app.set('port', 5000);
 app.use('/static', express.static(__dirname + '/static'));
 // Routing
@@ -60,21 +62,29 @@ server.listen(5000, function() {
 });
 
 // Add the WebSocket handlers
-io.on('connection', function(socket) {
+/*io.on('connection', function(socket) {
 });
 
 setInterval(function() {
   io.sockets.emit('message', 'hi!');
-}, 1000);
+}, 1000);*/
 
 var players = {};
-io.on('connection', function(socket) {
+
+io.on('connection', function(socket) 
+{
+    socket.on('new player', myModule.newPlayer(socket, players)); 
+    
+    socket.on('movement', myModule.playerMove(data, players));
+});
+
+/*io.on('connection', function(socket) {
   socket.on('new player', function() {
     players[socket.id] = {
       x: 300,
       y: 300
     };
-  });
+  });*/
   
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
