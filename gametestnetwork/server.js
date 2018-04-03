@@ -25,8 +25,6 @@ server.listen(5000, function() {
 });
 
 // Add the WebSocket handlers
-io.on('connection', function(socket) {
-});
 
 io.on('connection', function(socket) 
 {
@@ -35,10 +33,9 @@ io.on('connection', function(socket)
     socket.on('movement', myModule.playerMove(data, players));
 });
 
-
-  setInterval(function() 
-  {
-    io.sockets.emit('state', players); // Inifinite loop
-  }, 1000 / 60);
+setInterval(function() 
+{
+  io.sockets.emit('state', players); // Inifinite loop
+}, 1000 / 60);
 
 
