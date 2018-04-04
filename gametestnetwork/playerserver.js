@@ -1,4 +1,4 @@
-module.exports = {
+//var exports = module.exports{}
 /*playerServer: function()
 {
   var players = {};
@@ -29,16 +29,16 @@ module.exports = {
 }
 }*/
 
-newPlayer: function(socket, players)
+exports.newPlayer = function(value, players)
 {
-  players[socket.id] = {
+  players[value] = {
     x: 300,
     y: 300
   };
-},
+};
 
 //module.exports = 
-playerMove: function(data, players)
+exports.playerMove = function(data, players)
 {
   var player = players[socket.id] || {};
       if (data.left) {
@@ -53,5 +53,6 @@ playerMove: function(data, players)
       if (data.down) {
         player.y += 5;
       }
-}
-}
+};
+
+//exports.data = methods;

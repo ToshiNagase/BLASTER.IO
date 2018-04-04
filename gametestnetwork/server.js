@@ -48,7 +48,7 @@ var app = express();
 var server = http.Server(app);
 var io = socketIO(server);
 
-const myModule = require('./playerserver');
+var hope = require("./playerserver.js");
 
 app.set('port', 5000);
 app.use('/static', express.static(__dirname + '/static'));
@@ -61,30 +61,31 @@ server.listen(5000, function() {
   console.log('Starting server on port 5000');
 });
 
-// Add the WebSocket handlers
-/*io.on('connection', function(socket) {
-});
-
-setInterval(function() {
-  io.sockets.emit('message', 'hi!');
-}, 1000);*/
-
 var players = {};
 
-io.on('connection', function(socket) 
+/*io.on('connection', function(socket) 
 {
     socket.on('new player', myModule.newPlayer(socket, players)); 
     
     socket.on('movement', myModule.playerMove(data, players));
+});*/
+
+/*function myFunction(socket)
+{
+  another.newPlayer(socket, players);
+}*/
+
+io.on('connection', function(socket)
+{
+  socket.on('new player', function(socket) {
+    //players[socket.id] = {x: 300, y: 300};
+    var val = socket.id;
+
+    hope.newPlayer(val, players);
+  });
 });
 
-/*io.on('connection', function(socket) {
-  socket.on('new player', function() {
-    players[socket.id] = {
-      x: 300,
-      y: 300
-    };
-  });*/
+io.on('connection', function(socket) {
   
   socket.on('movement', function(data) {
     var player = players[socket.id] || {};
@@ -101,10 +102,8 @@ io.on('connection', function(socket)
       player.y += 5;
     }
   });
-});
+});//*/
 
 setInterval(function() {
   io.sockets.emit('state', players); // Inifinite loop
 }, 1000 / 60);
-
-
