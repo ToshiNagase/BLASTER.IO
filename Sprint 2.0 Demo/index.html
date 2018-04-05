@@ -85,7 +85,7 @@
                 clearPlayer();
                 drawEnemy();
                 drawEb();
-                if (counter == 75)
+                if (counter == 200)
                 {
                     for (i = 0; i < enemyRoster.length; i++) {
                         if (!enemyRoster[i].hasBeenHit) {
@@ -104,8 +104,20 @@
 
     //addPlayer("green", size, width / 2 - 50, height / 2);
     addPlayer("red", 15, width / 2 , height / 2);
-    addEnemy("blue", 15, width / 2+200, height / 3 - 300);
+    addEnemy("blue", 15, width / 2+200, height / 3 - 200);
     addEnemy("blue", 15, width / 2 + 500, height / 3 + 300);
+
+    /*for (i = 0; i < 3; i++)
+    {
+        addEnemy("blue", 15, Math.floor(Math.random()*700), Math.floor(Math.random()*700));
+    }
+
+    for (i = 0; i < 5; i++)
+    {
+        addTree(100,100, Math.floor(Math.random()*1001 + 50), Math.floor(Math.random()*1001 + 50));
+        addrock(50,50, Math.floor(Math.random()*1001 + 50), Math.floor(Math.random()*1001 + 50));
+    }*/
+
     addTree(100,100,50,500);
     addTree(100,100,100,100);
     addTree(100,100,500,500);
@@ -116,7 +128,7 @@
     addTree(100,100,100,800);
     addTree(100,100,800,100);
     addTree(100,100,500,700);
-    addrock(50, 50, 300, 300);
+    addrock(50, 50, 300, 400);
     addrock(50,50,400,700);
     window.requestAnimationFrame(callback);
     };

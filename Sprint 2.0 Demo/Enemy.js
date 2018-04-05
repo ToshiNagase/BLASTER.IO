@@ -13,13 +13,14 @@ var enemyID = 0;
         this.speed = speed;
         this.hasBeenHit = false;
         this.num = 0;
-        this.randX = 0;
-        this.randY = 0;
+        this.randX = 1;
+        this.randY = 1;
+        this.farEnough = false;
     }
     var enemyRoster = [];
 
     function addEnemy(color, size, x, y, speed) {
-        enemyRoster[enemyID] = new enemy(enemyID, color, size, x, y,speed);
+        enemyRoster[enemyID] = new enemy(enemyID, color, size, x, y, speed);
         enemyID += 1;
     }
 
@@ -36,16 +37,15 @@ var enemyID = 0;
 
         if (distance < 100)
         {
-            if (enemy.num == 100)
+            if (enemy.num == 70)
             {
-                enemy.randX = Math.floor(Math.random() * 101);
-                enemy.randY = Math.floor(Math.random() * 101);
+                enemy.randX = Math.floor(Math.random() * 101) + 1;
+                enemy.randY = Math.floor(Math.random() * 101) + 1;
                 enemy.num = 0;
             }
 
             dx = enemy.randX;
             dy = enemy.randY;
-            eSpeed = -5.0
             enemy.num++;
         }
         /*var bulletx;
