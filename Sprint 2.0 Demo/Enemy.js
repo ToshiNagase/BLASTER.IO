@@ -12,10 +12,13 @@ var enemyID = 0;
         this.mapY = y;
         this.speed = speed;
         this.hasBeenHit = false;
+        this.num = 0;
+        this.randX = 0;
+        this.randY = 0;
     }
     var enemyRoster = [];
 
-    function addEnemy(color, size, x, y,speed) {
+    function addEnemy(color, size, x, y, speed) {
         enemyRoster[enemyID] = new enemy(enemyID, color, size, x, y,speed);
         enemyID += 1;
     }
@@ -24,8 +27,28 @@ var enemyID = 0;
     {
         var eSpeed = -0.9;
         var playerx = enemy.x - player.x;
-        var playery = enemy.y - player.y
-        var bulletx;
+        var playery = enemy.y - player.y;
+
+        var dx = playerx;
+        var dy = playery;
+
+        var distance = Math.sqrt(Math.pow(playerx, 2) + Math.pow(playery, 2));
+
+        if (distance < 100)
+        {
+            if (enemy.num == 100)
+            {
+                enemy.randX = Math.floor(Math.random() * 101);
+                enemy.randY = Math.floor(Math.random() * 101);
+                enemy.num = 0;
+            }
+
+            dx = enemy.randX;
+            dy = enemy.randY;
+            eSpeed = -5.0
+            enemy.num++;
+        }
+        /*var bulletx;
         var bullety;
         var dx;
         var dy;
@@ -60,13 +83,15 @@ var enemyID = 0;
         if (playerDistance > 0) {
             dx = playerx;
             dy = playery;
-        }
+        }*/
         /*if (enemy.x > (window.innerWidth - 100) || enemy.x < 100) {
             dx = 0;
         }
         if (enemy.y > (window.innerHeight - 100) || enemy.y < 100) {
             dy = 0;
         }*/
+
+
         var mag = Math.sqrt(dx*dx+dy*dy);
 
         //if (mag > 33)
