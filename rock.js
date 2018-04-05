@@ -22,7 +22,7 @@ function playerReflect(bullet, currentrock) {
         	(bullet.yPos < (currentrock.y + currentrock.height)))
         {
         	if (!bullet.hasReflect) {
-        		var angle = 180 * Math.atan((playerRoster[0].y - currentrock.y) / (playerRoster[0].x - currentrock.x)) / Math.PI;
+        		var angle = 180 * Math.atan((bullet.playerY - currentrock.y) / (bullet.playerX - currentrock.x)) / Math.PI;
         		if (angle < 45 && angle > -45 || angle > 135 && angle < 215) {
 		        	bullet.dx = -bullet.dx;
 		        	bullet.dy = bullet.dy;

@@ -20,6 +20,8 @@ function bullet(id, color, size, speed, xPos, yPos, mouseX, mouseY)
         this.xOrigin = xPos;
         this.yOrigin = yPos;
         this.hasReflect = false;
+        this.playerX;
+        this.playerY;
 	//this.velX = velX;
 	//this.velY = velY;
 }
@@ -27,6 +29,8 @@ function bullet(id, color, size, speed, xPos, yPos, mouseX, mouseY)
 function addBullet(color,rSize,rSpeed,rxPos,ryPos,rmouseX,rmouseY)
 {
 	bulletRoster[bulletID] = new bullet(bulletID,color,rSize,rSpeed,rxPos,ryPos,rmouseX,rmouseY);
+    bulletRoster[bulletID].playerX = playerRoster[0].x;
+    bulletRoster[bulletID].playerY = playerRoster[0].y;
 	bulletID+=1;
 }
 
