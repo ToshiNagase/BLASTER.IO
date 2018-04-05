@@ -8,6 +8,8 @@
     <script src="eb.js"></script>
     <script src="tree.js"></script>
     <script src="rock.js"></script>
+    <script src="lose.js"></script>
+    <script src="win.js"></script>
 </head>
 <body>
         <canvas id="blaster" width="1000" height="1000"></canvas>
@@ -30,7 +32,8 @@
     var down = false;
     var left = false;
     var right = false;
-    var gameStart = true;
+    var game = true;
+    var win = true;
 
     window.addEventListener("keydown", moveSomething, false);
  
@@ -78,7 +81,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             //clearBullet();
-            if (gameStart) {
+            if (game) {
                 counter+=1;
                 clearEb();
                 clearEnemy();
@@ -98,26 +101,43 @@
                 drawBullet()
                 drawTree();
                 drawrock();
+                drawLose();
+                //drawWin();
+            }
+            else {
+                if (win == false) {
+                    //drawWin();
+                    //addWin(700,700,0,0);
+                    drawLose();
+                    addLose(700,700,0,0);
+                }
+                else {
+                    //drawWin();
+                    drawLose();
+                    addLose(700,700,0,0);
+                    //drawWin();
+                    //addWin(700,700,0,0);
+                }
             }
             window.requestAnimationFrame(callback);
     };
 
     //addPlayer("green", size, width / 2 - 50, height / 2);
-    addPlayer("red", 15, width / 2 , height / 2);
-    addEnemy("blue", 15, width / 2+200, height / 3 - 300);
-    addEnemy("blue", 15, width / 2 + 500, height / 3 + 300);
-    addTree(100,100,50,500);
-    addTree(100,100,100,100);
-    addTree(100,100,500,500);
-    addTree(100,100,300,800);
-    addTree(100,100,300,90);
-    addTree(100,100,900,500);
-    addTree(100,100,900,900);
-    addTree(100,100,100,800);
-    addTree(100,100,800,100);
-    addTree(100,100,500,700);
-    addrock(50, 50, 300, 300);
-    addrock(50,50,400,700);
+        addPlayer("red", 15, width / 2 , height / 2);
+        addEnemy("blue", 15, width / 2+200, height / 3 - 300);
+        addEnemy("blue", 15, width / 2 + 500, height / 3 + 300);
+        addTree(100,100,50,500);
+        addTree(100,100,100,100);
+        addTree(100,100,500,500);
+        addTree(100,100,300,800);
+        addTree(100,100,300,90);
+        addTree(100,100,900,500);
+        addTree(100,100,900,900);
+        addTree(100,100,100,800);
+        addTree(100,100,800,100);
+        addTree(100,100,500,700);
+        addrock(50, 50, 300, 300);
+        addrock(50,50,400,700);
     window.requestAnimationFrame(callback);
     };
 

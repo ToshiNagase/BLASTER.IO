@@ -117,7 +117,8 @@ var enemyID = 0;
             if (counter == enemyRoster.length)
             {
                 window.alert("you win!");
-                exit();
+                game = false;
+                win = true;  
             }
             
             updateEnemy(currentEnemy, playerRoster[0]);

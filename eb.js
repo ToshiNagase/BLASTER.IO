@@ -15,18 +15,22 @@ function eb(id, color, size, speed, xPos, yPos)
     this.dx = 0;
     this.dy = 0;
     this.hasReflect = false;
+    this.playerX;
+    this.playerY;
 }
 
 function addEb(color,rSize,rSpeed,rxPos,ryPos)
 {
 	ebRoster[ebID] = new eb(ebID,color,rSize,rSpeed,rxPos,ryPos);
+    ebRoster[ebID].playerX = playerRoster[0].x;
+    ebRoster[ebID].playerY = playerRoster[0].y;
 	ebID+=1;
 }
 
 function updateEb(eb, player)
 {
-    dx = eb.initX - player.x;
-    dy = eb.initY - player.y;
+    dx = eb.initX - eb.playerX;
+    dy = eb.initY - eb.playerY;
 	var mag = Math.sqrt(dx * dx + dy * dy);
 
     var velX = (dx/mag) * eb.speed;

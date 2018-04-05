@@ -1,7 +1,7 @@
 //var playerHasBeenHit = false;    
 var playerID = 0;
 
-var maxSpeed = 2;
+var maxSpeed = 10;
 
 var friction = 0.98;
     function player(id, color, size, x, y, speed) {
@@ -97,7 +97,8 @@ var friction = 0.98;
                      //ebRoster.splice(bullet.bulletID, 1);
                      eb.hasHit = true;
                      window.alert("you dead");
-                     exit();
+                     game = false;
+                     win = false;
                 }
             }
     }
