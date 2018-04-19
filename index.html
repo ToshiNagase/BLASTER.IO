@@ -28,6 +28,7 @@
     var y = height / 2;
     var counter = 0;
 
+    var done = false;
     var up = false;
     var down = false;
     var left = false;
@@ -105,16 +106,21 @@
                 //drawWin();
             }
             else {
-                if (win == false) {
+                if (win == false && !done) {
                     //drawWin();
                     //addWin(700,700,0,0);
                     drawLose();
                     addLose(700,700,0,0);
+                    window.alert("HELO");
+                    done = true;
+
                 }
-                else {
+                else if (!done) {
                     //drawWin();
                     drawLose();
                     addLose(700,700,0,0);
+                    window.alert("win:)");
+                    done = true;
                     //drawWin();
                     //addWin(700,700,0,0);
                 }

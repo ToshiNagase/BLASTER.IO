@@ -1,7 +1,7 @@
 //var playerHasBeenHit = false;    
 var playerID = 0;
 
-var maxSpeed = 10;
+var maxSpeed = 3;
 
 var friction = 0.98;
     function player(id, color, size, x, y, speed) {
@@ -51,6 +51,9 @@ var friction = 0.98;
                 right = false;
             }
         }
+        
+        player.xVel *= friction;
+        player.yVel *= friction;
         if(player.xVel > maxSpeed) {
             player.xVel = maxSpeed;
         }
@@ -63,8 +66,6 @@ var friction = 0.98;
         if (player.yVel < -maxSpeed) {
             player.yVel = -maxSpeed;
         }
-        player.xVel *= friction;
-        player.yVel *= friction;
         player.y += player.yVel;
         
         player.x += player.xVel;
