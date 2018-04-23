@@ -30,7 +30,7 @@ io.on('connection', function(socket) {
 var players = {};
 var bullets = {};
 
-io.on('connection', function(socket) {]
+io.on('connection', function(socket) {
 
   socket.on('new player', function() {
     players[socket.id] = {
