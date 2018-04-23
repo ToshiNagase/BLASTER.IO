@@ -23,14 +23,24 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 });
 
-setInterval(function() {
+/*setInterval(function() {
   io.sockets.emit('message', 'hi!');
-}, 1000);
+}, 1000);*/
 
 var players = {};
-io.on('connection', function(socket) {
+var bullets = {};
+
+io.on('connection', function(socket) {]
+
   socket.on('new player', function() {
     players[socket.id] = {
+      x: 300,
+      y: 300
+    };
+  });
+
+  socket.on('new bullet', function() {
+    bullets[socket.id] = {
       x: 300,
       y: 300
     };
@@ -51,6 +61,23 @@ io.on('connection', function(socket) {
       player.y += 5;
     }
   });
+
+  socket.on('bMove', function(data) {
+    var bullet = bullets[socket.id] || {};
+    if (data.left) {
+      bullet.x -= 5;
+    }
+    if (data.up) {
+      bullet.y -= 5;
+    }
+    if (data.right) {
+      bullet.x += 5;
+    }
+    if (data.down) {
+      bullet.y += 5;
+    }
+  });
+
 });
 
 setInterval(function() {
