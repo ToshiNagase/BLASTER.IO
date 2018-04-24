@@ -88,12 +88,14 @@ socket.on('state', function(objects) {
   
   for (var id in objects) {
     var object = objects[id];
-    context.beginPath();
+    context.fillRect(object.x, object.y, 5, 5);
+
+    /*context.beginPath();
     context.arc(object.x, object.y, 20, 0, 2 * Math.PI);
     //context.fill();
     context.lineWidth = 3;
     context.strokeStyle = '#FF0000';
-    context.stroke();
+    context.stroke();*/
   }
 
   /*for (var id in bullets) {

@@ -40,7 +40,7 @@ io.on('connection', function(socket) {
       y: 300
     };
   });*/
-
+  
   socket.on('new object', function() {
     objects[socket.id] = {
       x: 300,
