@@ -27,42 +27,51 @@ io.on('connection', function(socket) {
   io.sockets.emit('message', 'hi!');
 }, 1000);*/
 
-var players = {};
-var bullets = {};
+//var players = {};
+//var bullets = {};
+
+var objects = {};
 
 io.on('connection', function(socket) {
 
-  socket.on('new player', function() {
+  /*socket.on('new player', function() {
     players[socket.id] = {
       x: 300,
       y: 300
     };
-  });
+  });*/
 
-  socket.on('new bullet', function() {
-    bullets[socket.id] = {
+  socket.on('new object', function() {
+    object[socket.id] = {
       x: 300,
       y: 300
     };
   });
+
+/*  socket.on('new bullet', function() {
+    bullets[socket.id] = {
+      x: 300,
+      y: 300
+    };
+  });*/
   
   socket.on('movement', function(data) {
-    var player = players[socket.id] || {};
+    var object = object[socket.id] || {};
     if (data.left) {
-      player.x -= 5;
+      object.x -= 5;
     }
     if (data.up) {
-      player.y -= 5;
+      object.y -= 5;
     }
     if (data.right) {
-      player.x += 5;
+      object.x += 5;
     }
     if (data.down) {
-      player.y += 5;
+      object.y += 5;
     }
   });
 
-  socket.on('bMove', function(data) {
+  /*socket.on('bMove', function(data) {
     var bullet = bullets[socket.id] || {};
     if (data.left) {
       bullet.x -= 5;
@@ -76,10 +85,10 @@ io.on('connection', function(socket) {
     if (data.down) {
       bullet.y += 5;
     }
-  });
+  });*/
 
 });
 
 setInterval(function() {
-  io.sockets.emit('state', players); // Inifinite loop
+  io.sockets.emit('state', objects); // Inifinite loop
 }, 1000 / 60);
