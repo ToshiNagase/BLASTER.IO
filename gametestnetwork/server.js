@@ -42,7 +42,7 @@ io.on('connection', function(socket) {
   });*/
 
   socket.on('new object', function() {
-    object[socket.id] = {
+    objects[socket.id] = {
       x: 300,
       y: 300
     };
@@ -56,7 +56,7 @@ io.on('connection', function(socket) {
   });*/
   
   socket.on('movement', function(data) {
-    var object = object[socket.id] || {};
+    var object = objects[socket.id] || {};
     if (data.left) {
       object.x -= 5;
     }
