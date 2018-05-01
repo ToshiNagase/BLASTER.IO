@@ -33,7 +33,7 @@ var tree_num = 5;
 for (i =0; i < tree_num; i++)
 {
   trees [i] = {
-    x: Math.floor(Math.random(),
+    x: 
     y: 
   };
 }
