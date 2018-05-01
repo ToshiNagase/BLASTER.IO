@@ -17,21 +17,6 @@ var movement = {
 
 var mousePos = [];
 
-/*var bMovement = {
-  up: false,
-  down: false,
-  left: false,
-  right: false
-}*/
-
-//var bulletRoster[];
-/*document.addEventListener('click', function(event) {
-  mousePos [mousePos.length] = {
-    xClick = event.clientX;
-    yClick = event.clientY;
-  }
-});*/
-
 document.addEventListener("mousedown", function(event){
   var val = mousePos.length;
 
@@ -87,8 +72,6 @@ document.addEventListener('keyup', function(event) {
 });
 
 socket.emit('new player');
-//socket.emit('new bullet');
-
 
 setInterval(function() {
   socket.emit('movement', movement);

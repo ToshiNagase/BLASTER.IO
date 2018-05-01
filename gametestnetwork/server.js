@@ -23,41 +23,26 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 });
 
-/*setInterval(function() {
-  io.sockets.emit('message', 'hi!');
-}, 1000);*/
-var bullet_speed = 5;
-var players = {};
-var bullets = [];
+var bullet_speed = 5; // Magic #
+var players = {}; // Player object
+var bullets = []; // Bullet array
 
-var objects = {
+var objects = { // Fields
   players, bullets
 };
 
 io.on('connection', function(socket) {
-
-  /*socket.on('new player', function() {
-    players[socket.id] = {
-      x: 300,
-      y: 300
-    };
-  });*/
   
-  socket.on('new player', function() {
+  socket.on('new player', function() { // event, followed by function performed
     objects.players [socket.id] = {
       x: 300,
       y: 300
     };
-
-    /*objects.bullets [socket.id] = {
-      x: 300,
-      y: 300
-    };*/
   });
 
   socket.on('new bullet', function(data)
   {
-    var ind = data.length - 1;
+    var ind = data.length - 1; // data stands in for whatever variable is passed through
     var player = objects.players [socket.id] || {};
     objects.bullets [ind] = 
     {
