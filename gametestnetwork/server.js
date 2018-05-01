@@ -95,23 +95,6 @@ io.on('connection', function(socket) {
       object.y += 5;
     }
   });
-
-  /*socket.on('bMove', function(data) {
-    var bullet = bullets[socket.id] || {};
-    if (data.left) {
-      bullet.x -= 5;
-    }
-    if (data.up) {
-      bullet.y -= 5;
-    }
-    if (data.right) {
-      bullet.x += 5;
-    }
-    if (data.down) {
-      bullet.y += 5;
-    }
-  });*/
-
 });
 
 setInterval(function() {
