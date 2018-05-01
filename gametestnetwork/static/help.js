@@ -18,9 +18,7 @@ var movement = {
 var mousePos = [];
 
 document.addEventListener("mousedown", function(event){
-  var val = mousePos.length;
-
-  mousePos [val] =
+  mousePos [mousePos.length] =
   {
     xPos: event.clientX,
     yPos: event.clientY
@@ -90,6 +88,15 @@ socket.on('state', function(objects) {
   context.clearRect(0, 0, 800, 600);
   context.fillStyle = 'red';
   
+  var tree_image = new Image();
+  tree_image.src = '/static/Image_tree.jpeg';
+
+  for (i = 0; i < objects.trees.length; i++)
+  {
+    var object = objects.trees [i];
+    context.drawImage(tree_image, object.x, object.y, 100, 100);
+  }
+
   for (var id in objects.players) {
     var object = objects.players [id];
 
