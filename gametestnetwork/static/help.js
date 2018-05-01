@@ -13,7 +13,9 @@ var movement = {
   down: false,
   left: false,
   right: false
-}
+};
+
+var mousePos = {};
 
 /*var bMovement = {
   up: false,
@@ -23,6 +25,23 @@ var movement = {
 }*/
 
 //var bulletRoster[];
+/*document.addEventListener('click', function(event) {
+  mousePos [mousePos.length] = {
+    xClick = event.clientX;
+    yClick = event.clientY;
+  }
+});*/
+
+document.addEventListener("mousedown", function(event){
+  mousePos [mousePos.length] =
+  {
+    xPos: event.x,
+    yPos: event.y
+  }
+
+  socket.emit('new bullet', mousePos);
+});
+
 
 document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
@@ -65,13 +84,13 @@ document.addEventListener('keyup', function(event) {
   }
 });
 
-socket.emit('new object');
+socket.emit('new player');
 //socket.emit('new bullet');
 
 
 setInterval(function() {
   socket.emit('movement', movement);
-  //socket.emit('bMove', bMovement)
+  socket.emit('updateBullet', mousePos);
 }, 1000 / 60);
 
 
@@ -84,23 +103,22 @@ var context = canvas.getContext('2d');
 
 socket.on('state', function(objects) {
   context.clearRect(0, 0, 800, 600);
-  context.fillStyle = 'red';
+  context.fillStyle = 'blue';
   
-  for (var id in objects) {
-    var object = objects[id];
-    context.fillRect(object.x, object.y, 5, 5);
+  for (var id in objects.players) {
+    var object = objects.players [id];
 
-    /*context.beginPath();
+    context.beginPath();
     context.arc(object.x, object.y, 20, 0, 2 * Math.PI);
     //context.fill();
     context.lineWidth = 3;
     context.strokeStyle = '#FF0000';
-    context.stroke();*/
+    context.stroke();
   }
 
-  /*for (var id in bullets) {
-    var bullet = bullets[id];
-    context.fillRect(bullet.x, bullet.y, 5, 5);
-  }*/
+  for (var id in objects.bullets) {
+    var object = objects.bullets [id];
+    context.fillRect(object.x, object.y, 5, 5);
+  }
 
 });

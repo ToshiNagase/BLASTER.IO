@@ -27,10 +27,12 @@ io.on('connection', function(socket) {
   io.sockets.emit('message', 'hi!');
 }, 1000);*/
 
-//var players = {};
-//var bullets = {};
+var players = {};
+var bullets = {};
 
-var objects = {};
+var objects = {
+  players, bullets
+};
 
 io.on('connection', function(socket) {
 
@@ -41,22 +43,51 @@ io.on('connection', function(socket) {
     };
   });*/
   
-  socket.on('new object', function() {
-    objects[socket.id] = {
+  socket.on('new player', function() {
+    objects.players [socket.id] = {
       x: 300,
       y: 300
     };
+
+    /*objects.bullets [socket.id] = {
+      x: 300,
+      y: 300
+    };*/
   });
 
-/*  socket.on('new bullet', function() {
-    bullets[socket.id] = {
-      x: 300,
-      y: 300
-    };
-  });*/
+  socket.on('new bullet', function(data)
+  {
+    if (false)
+    {
+      var ind = data.length - 1;
+      var player = objects.players [socket.id] || {};
+      objects.bullets [ind] = 
+      {
+        initX: player.x,
+        initY: player.y,
+        mag: Math.sqrt(Math.pow((data [ind].xPos - player.x), 2) +
+        Math.pow((data [ind].yPos - player.y), 2)),
+
+        x: player.x,
+        y: player.y
+      };
+    }
+  });
+
+  socket.on('updateBullet', function(data)
+  {
+    for(i = 0; i < objects.bullets.length; i++)
+    {
+      var dx = data [i].xPos - objects.bullets [i].x;
+      var dy = data [i].yPos - objects.bullets [i].y;
+
+      objects.bullets [i].x += (dx / objects.bullets [i].mag);
+      objects.bullets [i].y += (dx / objects.bullets [i].mag);
+    }
+  });
   
   socket.on('movement', function(data) {
-    var object = objects[socket.id] || {};
+    var object = objects.players [socket.id] || {};
     if (data.left) {
       object.x -= 5;
     }
