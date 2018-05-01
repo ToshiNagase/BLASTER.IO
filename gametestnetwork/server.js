@@ -23,6 +23,7 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 });
 
+var player_speed = 4;
 var bullet_speed = 5; // Magic #
 var players = {}; // Player object
 var bullets = []; // Bullet array
@@ -34,8 +35,8 @@ var tree_num = 5;
 for(i = 0; i < tree_num; i++)
 {
   trees[i] = {
-    x: i*100,
-    y: i*100
+    x: Math.random()*1200,
+    y: Math.random()*750
   }
 }
 
@@ -110,20 +111,20 @@ io.on('connection', function(socket) {
   socket.on('movement', function(data) {
     var object = objects.players [socket.id] || {};
     if (data.left) {
-      object.x -= 5;
+      object.x -= player_speed;
       //console.log("#");
       //console.log(socket.id);
     }
     if (data.up) {
-      object.y -= 5;
+      object.y -= player_speed;
     }
     if (data.right) {
-      object.x += 5;
+      object.x += player_speed;
       //console.log("?");
       //console.log(socket.id);
     }
     if (data.down) {
-      object.y += 5;
+      object.y += player_speed;
     }
   });
 });

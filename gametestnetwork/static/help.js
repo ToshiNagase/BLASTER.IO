@@ -18,9 +18,7 @@ var movement = {
 var mousePos = [];
 
 document.addEventListener("mousedown", function(event){
-  var val = mousePos.length;
-
-  mousePos [val] =
+  mousePos [mousePos.length] =
   {
     xPos: event.clientX,
     yPos: event.clientY
