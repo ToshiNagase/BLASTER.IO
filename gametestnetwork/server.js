@@ -58,7 +58,7 @@ io.on('connection', function(socket) {
 
   socket.on('updateBullet', function(data)
   {
-    for(i = 0; i < objects.bullets.length; i++)
+    for (i = 0; i < objects.bullets.length; i++)
     {
       var dx = data [i].xPos - objects.bullets [i].initX;
       var dy = data [i].yPos - objects.bullets [i].initY;
