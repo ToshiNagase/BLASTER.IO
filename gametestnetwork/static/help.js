@@ -104,8 +104,10 @@ socket.on('state', function(objects) {
   }
 
   for (var id in objects.bullets) {
-    var object = objects.bullets [id];
-    context.fillRect(object.x, object.y, 5, 5);
+    if (objects.bullets [id].exists) {
+      var object = objects.bullets [id];
+      context.fillRect(object.x, object.y, 5, 5);
+    }
   }
 
 });

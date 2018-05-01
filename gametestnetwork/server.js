@@ -80,7 +80,7 @@ io.on('connection', function(socket) {
         objects.bullets [i].x += (dx * bullet_speed / objects.bullets [i].mag);
         objects.bullets [i].y += (dy * bullet_speed / objects.bullets [i].mag);
         for (var id in objects.players) {
-          if (id != objects.bullets[i].playerShot && Math.pow(objects.bullets [i].x - objects.players [id].x,2) + Math.pow(objects.bullets [i].y - objects.players [id].y,2) < 400) {
+          if (id != objects.bullets[i].playerShot && !objects.players [id].isHit && Math.pow(objects.bullets [i].x - objects.players [id].x,2) + Math.pow(objects.bullets [i].y - objects.players [id].y,2) < 400) {
             objects.players [id].isHit = true;
             objects.bullets[i].exists = false;
           }
