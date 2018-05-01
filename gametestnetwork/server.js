@@ -44,10 +44,14 @@ io.on('connection', function(socket) {
   {
     var ind = data.length - 1; // data stands in for whatever variable is passed through
     var player = objects.players [socket.id] || {};
+    console.log("#HELP");
+    console.log(ind);
     objects.bullets [ind] = 
     {
       initX: player.x,
       initY: player.y,
+      xPos: data [ind].xPos,
+      yPos: data [ind].yPos,
       mag: Math.sqrt(Math.pow((data [ind].xPos - player.x), 2) +
       Math.pow((data [ind].yPos - player.y), 2)),
 
@@ -60,8 +64,12 @@ io.on('connection', function(socket) {
   {
     for (i = 0; i < objects.bullets.length; i++)
     {
-      var dx = data [i].xPos - objects.bullets [i].initX;
-      var dy = data [i].yPos - objects.bullets [i].initY;
+      console.log("#WE TRIED");
+      console.log(objects.bullets.length);
+      console.log(data.length);
+      console.log(i);
+      var dx = objects.bullets [i].xPos - objects.bullets [i].initX;
+      var dy = objects.bullets [i].yPos - objects.bullets [i].initY;
 
       objects.bullets [i].x += (dx * bullet_speed / objects.bullets [i].mag);
       objects.bullets [i].y += (dy * bullet_speed / objects.bullets [i].mag);
@@ -72,12 +80,16 @@ io.on('connection', function(socket) {
     var object = objects.players [socket.id] || {};
     if (data.left) {
       object.x -= 5;
+      console.log("#");
+      console.log(socket.id);
     }
     if (data.up) {
       object.y -= 5;
     }
     if (data.right) {
       object.x += 5;
+      console.log("?");
+      console.log(socket.id);
     }
     if (data.down) {
       object.y += 5;
