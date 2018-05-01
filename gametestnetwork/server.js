@@ -26,10 +26,24 @@ io.on('connection', function(socket) {
 var bullet_speed = 5; // Magic #
 var players = {}; // Player object
 var bullets = []; // Bullet array
+<<<<<<< HEAD
 var numPlayers = 0;
+=======
+var trees = []; // Tree array
+
+var tree_num = 5;
+
+for (i =0; i < tree_num; i++)
+{
+  trees [i] = {
+    x: 
+    y: 
+  };
+}
+>>>>>>> 40583f6c6a5c1df203a4abb1c7acee0eaca527d1
 
 var objects = { // Fields
-  players, bullets
+  players, bullets, trees
 };
 
 io.on('connection', function(socket) {
@@ -46,21 +60,29 @@ io.on('connection', function(socket) {
   socket.on('new bullet', function(data)
   {
     var ind = data.length - 1; // data stands in for whatever variable is passed through
+<<<<<<< HEAD
     var player = objects.players [socket.id] || {};
     /*console.log("#HELP");
     console.log(ind);*/
+=======
+    var player = objects.players [socket.id] || {}; // asscoaite with a player
+>>>>>>> 40583f6c6a5c1df203a4abb1c7acee0eaca527d1
     objects.bullets [ind] = 
     {
-      initX: player.x,
+      initX: player.x, // initial position
       initY: player.y,
+<<<<<<< HEAD
       exists: !player.isHit,
       playerShot: player.id,
       xPos: data [ind].xPos,
+=======
+      xPos: data [ind].xPos, // mouse click
+>>>>>>> 40583f6c6a5c1df203a4abb1c7acee0eaca527d1
       yPos: data [ind].yPos,
       mag: Math.sqrt(Math.pow((data [ind].xPos - player.x), 2) +
-      Math.pow((data [ind].yPos - player.y), 2)),
+      Math.pow((data [ind].yPos - player.y), 2)), // vector magnitude
 
-      x: player.x,
+      x: player.x, // current position
       y: player.y
     };
   });
@@ -69,6 +91,7 @@ io.on('connection', function(socket) {
   {
     for (i = 0; i < objects.bullets.length; i++)
     {
+<<<<<<< HEAD
      /* console.log("#WE TRIED");
       console.log(objects.bullets.length);
       console.log(data.length);
@@ -76,6 +99,10 @@ io.on('connection', function(socket) {
       if (objects.bullets [i].exists) {
         var dx = objects.bullets [i].xPos - objects.bullets [i].initX;
         var dy = objects.bullets [i].yPos - objects.bullets [i].initY;
+=======
+      var dx = objects.bullets [i].xPos - objects.bullets [i].initX;
+      var dy = objects.bullets [i].yPos - objects.bullets [i].initY;
+>>>>>>> 40583f6c6a5c1df203a4abb1c7acee0eaca527d1
 
         objects.bullets [i].x += (dx * bullet_speed / objects.bullets [i].mag);
         objects.bullets [i].y += (dy * bullet_speed / objects.bullets [i].mag);
@@ -108,23 +135,6 @@ io.on('connection', function(socket) {
       object.y += 5;
     }
   });
-
-  /*socket.on('bMove', function(data) {
-    var bullet = bullets[socket.id] || {};
-    if (data.left) {
-      bullet.x -= 5;
-    }
-    if (data.up) {
-      bullet.y -= 5;
-    }
-    if (data.right) {
-      bullet.x += 5;
-    }
-    if (data.down) {
-      bullet.y += 5;
-    }
-  });*/
-
 });
 
 setInterval(function() {
