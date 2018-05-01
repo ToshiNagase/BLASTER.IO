@@ -15,7 +15,7 @@ var movement = {
   right: false
 };
 
-var mousePos = {};
+var mousePos = [];
 
 /*var bMovement = {
   up: false,
@@ -33,10 +33,12 @@ var mousePos = {};
 });*/
 
 document.addEventListener("mousedown", function(event){
-  mousePos [mousePos.length] =
+  var val = mousePos.length;
+
+  mousePos [val] =
   {
-    xPos: event.x,
-    yPos: event.y
+    xPos: event.clientX,
+    yPos: event.clientY
   }
 
   socket.emit('new bullet', mousePos);
@@ -103,7 +105,7 @@ var context = canvas.getContext('2d');
 
 socket.on('state', function(objects) {
   context.clearRect(0, 0, 800, 600);
-  context.fillStyle = 'blue';
+  context.fillStyle = 'red';
   
   for (var id in objects.players) {
     var object = objects.players [id];
