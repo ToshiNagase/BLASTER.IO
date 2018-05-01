@@ -81,24 +81,26 @@ setInterval(function() {
 
 
 var canvas = document.getElementById('canvas');
-canvas.width = 800;
-canvas.height = 600;
+
 
 var context = canvas.getContext('2d');
 
 socket.on('state', function(objects) {
-  context.clearRect(0, 0, 800, 600);
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  context.clearRect(0, 0, window.innerWidth, window.innerHeight);
   context.fillStyle = 'red';
   
   for (var id in objects.players) {
     var object = objects.players [id];
-
-    context.beginPath();
-    context.arc(object.x, object.y, 20, 0, 2 * Math.PI);
-    //context.fill();
-    context.lineWidth = 3;
-    context.strokeStyle = '#FF0000';
-    context.stroke();
+    if (!objects.players [id].isHit) {
+      context.beginPath();
+      context.arc(object.x, object.y, 20, 0, 2 * Math.PI);
+      //context.fill();
+      context.lineWidth = 3;
+      context.strokeStyle = '#FF0000';
+      context.stroke();
+    }
   }
 
   for (var id in objects.bullets) {
