@@ -26,10 +26,21 @@ io.on('connection', function(socket) {
 var bullet_speed = 5; // Magic #
 var players = {}; // Player object
 var bullets = []; // Bullet array
+var trees =[];
 var numPlayers = 0;
 
+var tree_num = 5;
+
+for(i = 0; i < tree_num; i++)
+{
+  trees[i] = {
+    x: i*100,
+    y: i*100
+  }
+}
+
 var objects = { // Fields
-  players, bullets
+  players, bullets, trees
 };
 
 io.on('connection', function(socket) {
@@ -108,23 +119,6 @@ io.on('connection', function(socket) {
       object.y += 5;
     }
   });
-
-  /*socket.on('bMove', function(data) {
-    var bullet = bullets[socket.id] || {};
-    if (data.left) {
-      bullet.x -= 5;
-    }
-    if (data.up) {
-      bullet.y -= 5;
-    }
-    if (data.right) {
-      bullet.x += 5;
-    }
-    if (data.down) {
-      bullet.y += 5;
-    }
-  });*/
-
 });
 
 setInterval(function() {
