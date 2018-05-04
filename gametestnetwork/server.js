@@ -24,9 +24,12 @@ io.on('connection', function(socket) {
 });
 
 var player_speed = 4;
+var startHealth = 100;
 var bullet_speed = 5; // Magic #
 var players = {}; // Player object
 var bullets = []; // Bullet array
+var player = 0;
+var health = startHealth;
 var trees =[];
 var numPlayers = 0;
 
@@ -41,8 +44,9 @@ for(i = 0; i < tree_num; i++)
 }
 
 var objects = { // Fields
-  players, bullets, trees
+  players, bullets, trees, player, health
 };
+
 
 io.on('connection', function(socket) {
   
@@ -50,9 +54,11 @@ io.on('connection', function(socket) {
     objects.players [socket.id] = {
       x: 300,
       y: 300,
+      health: startHealth,
       isHit: false,
       id:socket.id
     };
+    objects.player = socket.id;
   });
 
   socket.on('new bullet', function(data)
@@ -77,6 +83,7 @@ io.on('connection', function(socket) {
     };
   });
 
+
   socket.on('updateBullet', function(data)
   {
     for (i = 0; i < objects.bullets.length; i++)
@@ -96,16 +103,24 @@ io.on('connection', function(socket) {
             if (objects.bullets[i].exists && objects.bullets[i].x > objects.trees[j].x && objects.bullets[i].x < objects.trees[j].x + 100
               && objects.bullets[i].y > objects.trees[j].y && objects.bullets[i].y < objects.trees[j].y + 100) {
               objects.bullets[i].exists = false;
+
             }
           }
           if (id != objects.bullets[i].playerShot && !objects.players [id].isHit && 
             Math.pow(objects.bullets [i].x - objects.players [id].x,2) + Math.pow(objects.bullets [i].y - objects.players [id].y,2) < 400) {
-            objects.players [id].isHit = true;
+            objects.players [id].health = objects.players [id].health - 10;
+            console.log(objects.players [id].health + " " + socket.id);
             objects.bullets[i].exists = false;
+            //console.log(id);
+            if (objects.players [id].health <= 0) {
+              objects.players [id].isHit = true;
+            }
           }
         }
       }
     }
+    var player = objects.players [socket.id] || {};
+    objects.health = player.health;
   });
   
   socket.on('movement', function(data) {

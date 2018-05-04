@@ -74,6 +74,7 @@ socket.emit('new player');
 setInterval(function() {
   socket.emit('movement', movement);
   socket.emit('updateBullet', mousePos);
+  socket.emit('set health');
 }, 1000 / 60);
 
 
@@ -87,7 +88,7 @@ socket.on('state', function(objects) {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  context.fillStyle = 'red';
+  context.fillStyle = 'black';
 
   var tree_image = new Image();
   tree_image.src = '/static/Image_tree.jpeg';
@@ -97,7 +98,10 @@ socket.on('state', function(objects) {
     var object = objects.trees [i];
     context.drawImage(tree_image, object.x, object.y, 100, 100);
   }
-  
+  context.fillStyle = 'black';
+  context.font = '50px Arial';
+  context.fillText("Health: " + objects.health, 10, 50);
+  console.log("WORKS");
   for (var id in objects.players) {
     var object = objects.players [id];
     if (!objects.players [id].isHit) {
