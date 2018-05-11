@@ -19,6 +19,11 @@ server.listen(5000, function() {
   console.log('Starting server on port 5000');
 });
 
+var listener = io.listen(server);
+listener.sockets.on('connection', function(socket){
+    socket.emit('message', {'message': socket.id});
+});
+
 // Add the WebSocket handlers
 io.on('connection', function(socket) {
 });

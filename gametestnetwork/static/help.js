@@ -1,5 +1,5 @@
 //testing
-var socket = io();
+var socket = io('http://localhost:5000', {transports: ['websocket']});
 //socket.on('message', function(data) {
 //console.log(data);
 //});
@@ -8,6 +8,10 @@ socket.on('name', function(data) {
   // data is a parameter containing whatever data was sent
 });
 
+//var socket = io.connect();
+
+
+
 var movement = {
   up: false,
   down: false,
@@ -15,7 +19,15 @@ var movement = {
   right: false
 };
 
+
+
 var mousePos = [];
+var playerID;
+
+socket.on('message', function(data){
+    console.log(data.message);
+    playerID = data.message;
+});
 
 document.addEventListener("mousedown", function(event){
   mousePos [mousePos.length] =
@@ -100,8 +112,8 @@ socket.on('state', function(objects) {
   }
   context.fillStyle = 'black';
   context.font = '50px Arial';
-  context.fillText("Health: " + objects.health, 10, 50);
-  console.log("WORKS");
+  context.fillText("Health: " + objects.players [playerID].health, 10, 50);
+  //console.log("WORKS");
   for (var id in objects.players) {
     var object = objects.players [id];
     if (!objects.players [id].isHit) {
