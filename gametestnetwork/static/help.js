@@ -24,10 +24,10 @@ var movement = {
 var mousePos = [];
 var playerID;
 
-socket.on('message', function(data){
+/*socket.on('message', function(data){
     console.log(data.message);
     playerID = data.message;
-});
+});*/
 
 document.addEventListener("mousedown", function(event){
   mousePos [mousePos.length] =
@@ -105,14 +105,30 @@ socket.on('state', function(objects) {
   var tree_image = new Image();
   tree_image.src = '/static/Image_tree.jpeg';
 
+  var bandage_image = new Image();
+  bandage_image.src = '/static/Image_bandage.jpeg';
+
+  var bush_image = new Image();
+  bush_image.src = '/static/Image_bush.jpeg';
+
+
   for (i = 0; i < objects.trees.length; i++)
   {
     var object = objects.trees [i];
     context.drawImage(tree_image, object.x, object.y, 100, 100);
   }
+  for (j = 0; j < objects.bandages.length; j++) {
+    var object = objects.bandages [j];
+    if (!object.isUsed) {
+      context.drawImage(bandage_image, object.x, object.y, 30, 15);
+    }
+  }
+
+  
+
   context.fillStyle = 'black';
   context.font = '50px Arial';
-  context.fillText("Health: " + objects.players [playerID].health, 10, 50);
+  //context.fillText("Health: " + objects.players [playerID].health, 10, 50);
   //console.log("WORKS");
   for (var id in objects.players) {
     var object = objects.players [id];
@@ -124,6 +140,11 @@ socket.on('state', function(objects) {
       context.strokeStyle = '#FF0000';
       context.stroke();
     }
+  }
+
+  for (i = 0; i < objects.bushes.length; i++) {
+    var object = objects.bushes [i];
+    context.drawImage(bush_image, object.x, object.y, 100,100);
   }
 
   for (var id in objects.bullets) {

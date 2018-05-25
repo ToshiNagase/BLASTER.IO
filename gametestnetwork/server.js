@@ -18,11 +18,11 @@ app.get('/', function(request, response) {
 server.listen(5000, function() {
   console.log('Starting server on port 5000');
 });
-
+/*
 var listener = io.listen(server);
 listener.sockets.on('connection', function(socket){
     socket.emit('message', {'message': socket.id});
-});
+});*/
 
 // Add the WebSocket handlers
 io.on('connection', function(socket) {
@@ -36,9 +36,13 @@ var bullets = []; // Bullet array
 var player = 0;
 var health = startHealth;
 var trees =[];
+var bandages = [];
+var bushes = [];
 var numPlayers = 0;
 
 var tree_num = 5;
+var bandage_num = 3;
+var bush_num = 3;
 
 for(i = 0; i < tree_num; i++)
 {
@@ -48,8 +52,23 @@ for(i = 0; i < tree_num; i++)
   }
 }
 
+for (i = 0; i < bandage_num; i++) {
+  bandages[i] = {
+    x: Math.random() * 1200,
+    y: Math.random() * 750,
+    isUsed: false
+  }
+}
+
+for (i = 0; i < bush_num; i++) {
+  bushes[i] = {
+    x: Math.random() * 1200,
+    y: Math.random() * 750,
+  }
+}
+
 var objects = { // Fields
-  players, bullets, trees, player, health
+  bushes, players, bullets, trees, player, health, bandages
 };
 
 
@@ -61,7 +80,9 @@ io.on('connection', function(socket) {
       y: 300,
       health: startHealth,
       isHit: false,
-      id:socket.id
+      isHidden: false,
+      id:socket.id,
+      ammo: 100
     };
     objects.player = socket.id;
   });
@@ -82,7 +103,6 @@ io.on('connection', function(socket) {
       yPos: data [ind].yPos,
       mag: Math.sqrt(Math.pow((data [ind].xPos - player.x), 2) +
       Math.pow((data [ind].yPos - player.y), 2)),
-
       x: player.x,
       y: player.y
     };
@@ -108,7 +128,6 @@ io.on('connection', function(socket) {
             if (objects.bullets[i].exists && objects.bullets[i].x > objects.trees[j].x && objects.bullets[i].x < objects.trees[j].x + 100
               && objects.bullets[i].y > objects.trees[j].y && objects.bullets[i].y < objects.trees[j].y + 100) {
               objects.bullets[i].exists = false;
-
             }
           }
           if (id != objects.bullets[i].playerShot && !objects.players [id].isHit && 
@@ -146,9 +165,16 @@ io.on('connection', function(socket) {
     if (data.down) {
       object.y += player_speed;
     }
+    for (i = 0; i < objects.bandages.length; i++) {
+      bandage = objects.bandages [i];
+      if (object.x >= bandage.x && object.x <= bandage.x + 30 && object.y >= bandage.y && object.y <= bandage.y + 15 && !bandage.isUsed) {
+        object.health = object.health + 20;
+        bandage.isUsed = true;
+      }
+    }
   });
 });
 
 setInterval(function() {
-  io.sockets.emit('state', objects); // Inifinite loop
+  io.sockets.emit('state', objects); // Infinite loop
 }, 1000 / 60);
