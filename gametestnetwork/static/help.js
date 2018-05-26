@@ -133,8 +133,10 @@ socket.on('state', function(objects) {
 
   for (i = 0; i < objects.trees.length; i++)
   {
-    var object = objects.trees [i];
-    context.drawImage(tree_image, object.x, object.y, 100, 100);
+    if (objects.trees[i].health > 0) {
+      var object = objects.trees [i];
+      context.drawImage(tree_image, object.x, object.y, 100, 100);
+    }
   }
   for (j = 0; j < objects.bandages.length; j++) {
     var object = objects.bandages [j];
@@ -147,7 +149,6 @@ socket.on('state', function(objects) {
 
   context.fillStyle = 'black';
   context.font = '50px Arial';
-  //context.fillText("Health: " + objects.players [playerID].health, 10, 50);
   //console.log("WORKS");
   for (var id in objects.players) {
     var object = objects.players [id];
@@ -159,14 +160,28 @@ socket.on('state', function(objects) {
       if (clientID == object.userId)
       {
         context.strokeStyle = '#0000FF';
+        context.fillText("Health: ", 10, 50);
+        context.fillText("Ammo: " + object.ammo, 10,100);
+        if (object.health <= 30) {
+          context.fillStyle = 'red';
+        }
+        else if (object.health < 70) {
+          context.fillStyle = 'yellow';
+        }
+        else {
+          context.fillStyle = 'green';
+        }
+        context.fillRect(170,27, 5*object.health,20);
       }
       else
       {
         context.strokeStyle = '#FF0000';
       }
+      context.fillStyle = 'black';
       context.stroke();
     }
   }
+  
 
   for (i = 0; i < objects.bushes.length; i++) {
     var object = objects.bushes [i];

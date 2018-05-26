@@ -39,6 +39,7 @@ var trees =[];
 var bandages = [];
 var bushes = [];
 var numPlayers = 0;
+var treeHealth = 50;
 
 var tree_num = 5;
 var bandage_num = 3;
@@ -48,7 +49,8 @@ for(i = 0; i < tree_num; i++)
 {
   trees[i] = {
     x: Math.random()*1200,
-    y: Math.random()*750
+    y: Math.random()*750,
+    health: treeHealth
   }
 }
 
@@ -111,11 +113,16 @@ io.on('connection', function(socket) {
   {
     var ind = data.length - 1; // data stands in for whatever variable is passed through
     var player = objects.players [socket.id] || {};
+    var bExists = false;
+    if (!player.isHit && player.ammo > 0) {
+      bExists = true;
+      player.ammo = player.ammo - 1;
+    }
     objects.bullets [ind] = 
     {
       initX: player.x,
       initY: player.y,
-      exists: !player.isHit,
+      exists: bExists,
       playerShot: player.id,
       xPos: data [ind].xPos,
       yPos: data [ind].yPos,
@@ -142,8 +149,9 @@ io.on('connection', function(socket) {
             if (objects.bullets[i].exists && objects.bullets[i].x >
               objects.trees[j].x && objects.bullets[i].x < objects.trees[j].x + 100
               && objects.bullets[i].y > objects.trees[j].y && objects.bullets[i].y 
-              < objects.trees[j].y + 100) {
+              < objects.trees[j].y + 100 && objects.trees[j].health > 0) {
               objects.bullets[i].exists = false;
+              objects.trees[j].health = objects.trees[j].health - 10;
             }
           }
           if (id != objects.bullets[i].playerShot && !objects.players [id].isHit && 
