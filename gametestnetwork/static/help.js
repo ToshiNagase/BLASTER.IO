@@ -179,6 +179,10 @@ socket.on('state', function(objects) {
       }
       context.fillStyle = 'black';
       context.stroke();
+      if(object.players[id].isHit && clientID == object.userID)
+      {
+        window.location.href = "http://1718.lakeside-cs.org/The%20Folder%20for%20Start:Death/deathPage.html";
+      }
     }
   }
   
