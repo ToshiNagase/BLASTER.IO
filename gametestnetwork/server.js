@@ -110,8 +110,8 @@ io.on('connection', function(socket) {
   
   socket.on('new player', function(data) { // event, followed by function performed
     objects.players [socket.id] = {
-      x: 300,
-      y: 300,
+      x: Math.random() * 1200,
+      y: Math.random() * 750,
       health: startHealth,
       isHit: false,
       isHidden: false,
