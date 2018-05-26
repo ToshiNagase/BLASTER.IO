@@ -1,0 +1,50 @@
+body {
+    background-color: lightgreen;
+}
+
+p.title {
+	font-family: Times New Roman;
+    color: black;
+    font-size: 150px;
+    
+}
+
+p.paragraph {
+    font-family: Times New Roman;
+    font-size: 60px;  
+}
+
+.together{
+	line-height: .1;
+	text-align: center;
+}
+
+
+.button {
+	text-align: center;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 20px 60px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 50px;
+    color:black;
+    margin: 50px 2px;
+    cursor: pointer;
+    margin-left:auto;
+    margin-right:auto;
+    width:25%;
+}
+
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+
+
