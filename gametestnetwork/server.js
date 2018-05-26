@@ -71,28 +71,46 @@ var objects = { // Fields
   bushes, players, bullets, trees, player, health, bandages
 };
 
+var clients = [];
 
 io.on('connection', function(socket) {
+
+  socket.on('storeClientInfo', function (data)
+    {
+      var clientInfo = new Object();
+      clientInfo.customId = data.customId;
+      clientInfo.clientId = socket.id;
+      clients.push(clientInfo);
+    });
+
+  socket.on('disconnect', function (data)
+  {
+    for( var i=0, len=clients.length; i<len; ++i ){
+    var c = clients[i];
+    if(c.clientId == socket.id){
+      clients.splice(i,1);
+      break;
+      }
+    }
+  });
   
-  socket.on('new player', function() { // event, followed by function performed
+  socket.on('new player', function(data) { // event, followed by function performed
     objects.players [socket.id] = {
       x: 300,
       y: 300,
       health: startHealth,
       isHit: false,
       isHidden: false,
+      userId: data,
       id:socket.id,
-      ammo: 100
+      ammo: 30
     };
-    objects.player = socket.id;
   });
 
   socket.on('new bullet', function(data)
   {
     var ind = data.length - 1; // data stands in for whatever variable is passed through
     var player = objects.players [socket.id] || {};
-    /*console.log("#HELP");
-    console.log(ind);*/
     objects.bullets [ind] = 
     {
       initX: player.x,
@@ -113,10 +131,6 @@ io.on('connection', function(socket) {
   {
     for (i = 0; i < objects.bullets.length; i++)
     {
-     /* console.log("#WE TRIED");
-      console.log(objects.bullets.length);
-      console.log(data.length);
-      console.log(i);*/
       if (objects.bullets [i].exists) {
         var dx = objects.bullets [i].xPos - objects.bullets [i].initX;
         var dy = objects.bullets [i].yPos - objects.bullets [i].initY;
@@ -125,17 +139,20 @@ io.on('connection', function(socket) {
         objects.bullets [i].y += (dy * bullet_speed / objects.bullets [i].mag);
         for (var id in objects.players) {
           for (j = 0; j < objects.trees.length; j++) {
-            if (objects.bullets[i].exists && objects.bullets[i].x > objects.trees[j].x && objects.bullets[i].x < objects.trees[j].x + 100
-              && objects.bullets[i].y > objects.trees[j].y && objects.bullets[i].y < objects.trees[j].y + 100) {
+            if (objects.bullets[i].exists && objects.bullets[i].x >
+              objects.trees[j].x && objects.bullets[i].x < objects.trees[j].x + 100
+              && objects.bullets[i].y > objects.trees[j].y && objects.bullets[i].y 
+              < objects.trees[j].y + 100) {
               objects.bullets[i].exists = false;
             }
           }
           if (id != objects.bullets[i].playerShot && !objects.players [id].isHit && 
-            Math.pow(objects.bullets [i].x - objects.players [id].x,2) + Math.pow(objects.bullets [i].y - objects.players [id].y,2) < 400) {
+            Math.pow(objects.bullets [i].x - objects.players [id].x, 2) + 
+            Math.pow(objects.bullets [i].y - objects.players [id].y, 2) < 400) {
             objects.players [id].health = objects.players [id].health - 10;
             console.log(objects.players [id].health + " " + socket.id);
             objects.bullets[i].exists = false;
-            //console.log(id);
+
             if (objects.players [id].health <= 0) {
               objects.players [id].isHit = true;
             }

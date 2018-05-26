@@ -1,8 +1,27 @@
 //testing
-var socket = io('http://localhost:5000', {transports: ['websocket']});
+var socket = io();
+var clientID = create_UUID();
 //socket.on('message', function(data) {
 //console.log(data);
 //});
+
+function create_UUID(){ // Cite
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+}
+
+socket.on('connect', function (data)
+{
+  socket.emit('storeClientInfo',
+    { 
+      customId: clientID
+    });
+});
 
 socket.on('name', function(data) {
   // data is a parameter containing whatever data was sent
@@ -81,7 +100,7 @@ document.addEventListener('keyup', function(event) {
   }
 });
 
-socket.emit('new player');
+socket.emit('new player', clientID);
 
 setInterval(function() {
   socket.emit('movement', movement);
@@ -135,9 +154,16 @@ socket.on('state', function(objects) {
     if (!objects.players [id].isHit) {
       context.beginPath();
       context.arc(object.x, object.y, 20, 0, 2 * Math.PI);
-      //context.fill();
       context.lineWidth = 3;
-      context.strokeStyle = '#FF0000';
+
+      if (clientID == object.userId)
+      {
+        context.strokeStyle = '#0000FF';
+      }
+      else
+      {
+        context.strokeStyle = '#FF0000';
+      }
       context.stroke();
     }
   }
