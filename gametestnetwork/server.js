@@ -38,12 +38,14 @@ var health = startHealth;
 var trees =[];
 var bandages = [];
 var bushes = [];
+var ammo = [];
 var numPlayers = 0;
 var treeHealth = 50;
 
 var tree_num = 5;
 var bandage_num = 3;
 var bush_num = 3;
+var ammo_num = 7;
 
 for(i = 0; i < tree_num; i++)
 {
@@ -51,6 +53,13 @@ for(i = 0; i < tree_num; i++)
     x: Math.random()*1200,
     y: Math.random()*750,
     health: treeHealth
+  }
+}
+
+for (i = 0; i < ammo_num; i++) {
+  ammo[i] = {
+    x: Math.random()*1200,
+    y: Math.random()*750
   }
 }
 
@@ -69,13 +78,16 @@ for (i = 0; i < bush_num; i++) {
   }
 }
 
+setInterval(function(){ bandage_num++;ammo_num++; }, 3000);
+
 var objects = { // Fields
-  bushes, players, bullets, trees, player, health, bandages
+  bushes, players, bullets, trees, player, health, bandages, ammo
 };
 
 var clients = [];
 
 io.on('connection', function(socket) {
+
 
   socket.on('storeClientInfo', function (data)
     {
@@ -105,7 +117,7 @@ io.on('connection', function(socket) {
       isHidden: false,
       userId: data,
       id:socket.id,
-      ammo: 30
+      ammo: 50
     };
   });
 
@@ -192,9 +204,16 @@ io.on('connection', function(socket) {
     }
     for (i = 0; i < objects.bandages.length; i++) {
       bandage = objects.bandages [i];
-      if (object.x >= bandage.x && object.x <= bandage.x + 30 && object.y >= bandage.y && object.y <= bandage.y + 15 && !bandage.isUsed) {
+      if (object.x + 20 >= bandage.x && object.x - 20 <= bandage.x + 30 && object.y + 20 >= bandage.y && object.y - 20 <= bandage.y + 15 && !bandage.isUsed) {
         object.health = object.health + 20;
         bandage.isUsed = true;
+      }
+    }
+    for (i = 0; i < objects.ammo.length; i++) {
+      ammo = objects.ammo [i];
+      if (object.x + 20 >= ammo.x && object.x - 20 <= ammo.x + 30 && object.y + 20 >= ammo.y && object.y - 20 <= ammo.y + 15 && !ammo.isUsed) {
+        object.ammo = object.ammo + 10;
+        ammo.isUsed = true;
       }
     }
   });

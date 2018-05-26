@@ -119,6 +119,8 @@ socket.on('state', function(objects) {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  context.fillStyle = 'lightgreen';
+  context.fillRect(0,0,canvas.width,canvas.height);
   context.fillStyle = 'black';
 
   var tree_image = new Image();
@@ -130,18 +132,28 @@ socket.on('state', function(objects) {
   var bush_image = new Image();
   bush_image.src = '/static/Image_bush.jpeg';
 
+  var ammo_image = new Image();
+  ammo_image.src = '/static/Image_ammo.jpeg';
+
 
   for (i = 0; i < objects.trees.length; i++)
   {
     if (objects.trees[i].health > 0) {
       var object = objects.trees [i];
-      context.drawImage(tree_image, object.x, object.y, 100, 100);
+      context.drawImage(tree_image, object.x, object.y, 120, 120);
     }
   }
   for (j = 0; j < objects.bandages.length; j++) {
     var object = objects.bandages [j];
     if (!object.isUsed) {
-      context.drawImage(bandage_image, object.x, object.y, 30, 15);
+      context.drawImage(bandage_image, object.x, object.y, 30, 20);
+    }
+  }
+
+  for (i = 0; i < objects.ammo.length; i++) {
+    var object = objects.ammo [i];
+    if (!object.isUsed) {
+      context.drawImage(ammo_image, object.x, object.y, 25, 30);
     }
   }
 
@@ -191,7 +203,7 @@ socket.on('state', function(objects) {
 
   for (i = 0; i < objects.bushes.length; i++) {
     var object = objects.bushes [i];
-    context.drawImage(bush_image, object.x, object.y, 100,100);
+    context.drawImage(bush_image, object.x, object.y, 75,75);
   }
 
   for (var id in objects.bullets) {
