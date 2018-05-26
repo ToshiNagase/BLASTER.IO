@@ -156,7 +156,7 @@ socket.on('state', function(objects) {
       context.beginPath();
       context.arc(object.x, object.y, 20, 0, 2 * Math.PI);
       context.lineWidth = 3;
-
+//test
       if (clientID == object.userId)
       {
         context.strokeStyle = '#0000FF';
