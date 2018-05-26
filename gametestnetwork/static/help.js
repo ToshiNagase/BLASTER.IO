@@ -152,7 +152,8 @@ socket.on('state', function(objects) {
   //console.log("WORKS");
   for (var id in objects.players) {
     var object = objects.players [id];
-    if (!objects.players [id].isHit) {
+    if (!objects.players [id].isHit) 
+    {
       context.beginPath();
       context.arc(object.x, object.y, 20, 0, 2 * Math.PI);
       context.lineWidth = 3;
@@ -179,10 +180,11 @@ socket.on('state', function(objects) {
       }
       context.fillStyle = 'black';
       context.stroke();
-      if(object.players[id].isHit && clientID == object.userID)
-      {
-        window.location.href = "http://1718.lakeside-cs.org/The%20Folder%20for%20Start:Death/deathPage.html";
-      }
+
+    }
+    if(objects.players[id].isHit && clientID == object.userId)
+    {
+      window.location.href = "http://1718.lakeside-cs.org/The%20Folder%20for%20Start:Death/deathPage.html";
     }
   }
   
