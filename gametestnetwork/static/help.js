@@ -239,12 +239,6 @@ socket.on('state', function(objects) {
         context.arc(window.innerWidth/2, window.innerHeight/2, 20, 0, 2 * Math.PI);
         context.fillStyle = '#0000FF';
         context.fill();
-        //context.stroke();
-
-        /*context.fillStyle = 'white';
-        context.font = '50px Arial';
-        context.fillText("X: " + wx_min + " - " + wx_max, 10, 50);
-        context.fillText("Y: " + wy_min + " - " + wy_max, 10, 100);*/
         
         for (i = 0; i < objects.bullets.length; i++)
         {
@@ -309,7 +303,6 @@ socket.on('state', function(objects) {
                 context.fillStyle = '#FF0000';
                 context.arc(playerXpos, playerYpos, 20, 0, 2 * Math.PI);
                 context.fill();
-                //context.stroke();
               }
             }
           }
