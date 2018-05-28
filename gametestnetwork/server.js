@@ -221,6 +221,14 @@ io.on('connection', function(socket) {
     {
       if (objects.bullets [i].exists) {
 
+        if ((objects.bullets [i].realX < 0) ||
+            (objects.bullets [i].realX > worldWidth) ||
+            (objects.bullets [i].realX < 0) ||
+            (objects.bullets [i].realY > worldHeight))
+        {
+          objects.bullets [i].exists = false;
+        }
+        
         objects.bullets [i].realX += objects.bullets [i].dx;
         objects.bullets [i].realY += objects.bullets [i].dy;
 
