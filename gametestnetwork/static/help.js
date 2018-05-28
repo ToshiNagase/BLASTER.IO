@@ -213,7 +213,13 @@ socket.on('state', function(objects) {
   {
     var player = objects.players [id];
 
-    if (!player.isHit)
+    
+    if(player.isHit && clientID == player.userId)
+    {
+      window.location.href = "http://1718.lakeside-cs.org/Blaster2/deathPage.html";
+    }
+    //if (!player.isHit)
+    else
     {
       wx_min = player.realX - x_length/2;
       wx_max = player.realX + x_length/2;
@@ -237,7 +243,7 @@ socket.on('state', function(objects) {
         context.beginPath();
         context.lineWidth = 3;
         context.arc(window.innerWidth/2, window.innerHeight/2, 20, 0, 2 * Math.PI);
-        context.fillStyle = '#0000FF';
+        context.fillStyle = '#FAD7A0';
         context.fill();
         
         for (i = 0; i < objects.bullets.length; i++)
@@ -298,7 +304,7 @@ socket.on('state', function(objects) {
 
                 context.beginPath();
                 context.lineWidth = 3;
-                context.fillStyle = '#FF0000';
+                context.fillStyle = 'black';
                 context.arc(playerXpos, playerYpos, 20, 0, 2 * Math.PI);
                 context.fill();
               }

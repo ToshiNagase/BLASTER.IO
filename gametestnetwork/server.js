@@ -30,7 +30,7 @@ var y_sector = 8;
 
 var player_speed = 4;
 var startHealth = 100;
-var bullet_speed = 5;
+var bullet_speed = 15;
 var full_ammo = 50;
 var treeHealth = 50;
 
@@ -67,7 +67,7 @@ for(i = 0; i < tree_num; i++)
         y: y_rand,
         width: 100,
         height: 100,
-        helath: treeHealth,
+        health: treeHealth,
         isUsed: false
       }
     }
@@ -228,13 +228,13 @@ io.on('connection', function(socket) {
         {
           for (j = 0; j < objects.trees.length; j++)
           {
-            if (objects.bullets[i].exists &&
+            if (objects.trees[j].health > 0 && objects.bullets[i].exists &&
                 objects.bullets[i].realX > objects.trees[j].realX &&
                 objects.bullets[i].realX < objects.trees[j].realX + objects.trees[j].width &&
                 objects.bullets[i].realY > objects.trees[j].realY &&
                 objects.bullets[i].realY < objects.trees[j].realY + objects.trees[j].height)
             {
-              //objects.trees[j].health = objects.trees[j].health - 10;
+              objects.trees[j].health = objects.trees[j].health - 10;
               objects.bullets[i].exists = false;
             }
           }
@@ -349,4 +349,4 @@ io.on('connection', function(socket) {
 
 setInterval(function() {
   io.sockets.emit('state', objects); // Infinite loop
-}, 1000 / 60);
+}, 1000/50);
