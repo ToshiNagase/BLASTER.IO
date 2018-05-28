@@ -30,7 +30,7 @@ var y_sector = 8;
 
 var player_speed = 4;
 var startHealth = 100;
-var bullet_speed = 15;
+var bullet_speed = 6;
 var full_ammo = 50;
 var treeHealth = 50;
 
@@ -220,6 +220,14 @@ io.on('connection', function(socket) {
     for (i = 0; i < objects.bullets.length; i++)
     {
       if (objects.bullets [i].exists) {
+
+        if ((objects.bullets [i].realX < 0) ||
+            (objects.bullets [i].realX > worldWidth) ||
+            (objects.bullets [i].realX < 0) ||
+            (objects.bullets [i].realY > worldHeight))
+        {
+          objects.bullets [i].exists = false;
+        }
 
         objects.bullets [i].realX += objects.bullets [i].dx;
         objects.bullets [i].realY += objects.bullets [i].dy;
