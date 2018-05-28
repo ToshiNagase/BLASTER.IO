@@ -269,8 +269,6 @@ socket.on('state', function(objects) {
           }
         }
 
-        var counter = 0;
-
         for (var id in objects.players)
         {
           var drawing = objects.players [id];
