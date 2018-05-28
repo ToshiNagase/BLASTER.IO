@@ -385,7 +385,8 @@ socket.on('state', function(objects) {
         if (w_dom)
         {
           context.fillText("PLAYERS LEFT: " + survivors, 10, margin + 40);
-          context.fillText("<" + Math.floor(player.realX) + ", " + (worldHeight - Math.floor(player.realY)) + ">", 10, margin + 80);
+          context.fillText("<" + Math.floor(player.realX) + ", " +
+          (worldHeight - Math.floor(player.realY)) + ">", 10, margin + 80);
           context.fillText("AMMO: " + player.ammo, 10, margin + y_length - 40);
           context.fillText("HEALTH: ", 10, margin + y_length - 10);
         }
@@ -393,7 +394,8 @@ socket.on('state', function(objects) {
         else
         {
           context.fillText("PLAYERS LEFT: " + survivors, margin + 10, 40);
-          context.fillText("<" + Math.floor(player.realX) + ", " + (worldHeight - Math.floor(player.realY)) + ">", margin + 10, 80);
+          context.fillText("<" + Math.floor(player.realX) + ", " +
+          (worldHeight - Math.floor(player.realY)) + ">", margin + 10, 80);
           context.fillText("AMMO: " + player.ammo, margin + 10, y_length - 40);
           context.fillText("HEALTH: ", margin + 10, y_length - 10);
         }
