@@ -103,6 +103,18 @@ setInterval(function() {
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 
+  var tree_image = new Image();
+  tree_image.src = '/static/Image_tree.jpeg';
+  
+  var bush_image = new Image();
+  bush_image.src = '/static/Image_bush.jpeg';
+
+  var bandage_image = new Image();
+  bandage_image.src = '/static/Image_bandage.jpeg';
+
+  var ammo_image = new Image();
+  ammo_image.src = '/static/Image_ammo.jpeg';
+
 socket.on('state', function(objects) {
 
   canvas.width = window.innerWidth;
@@ -136,19 +148,6 @@ socket.on('state', function(objects) {
     context.fillRect(margin, 0, x_length, y_length);
     w_dom = false;
   }
-
-  var tree_image = new Image();
-  tree_image.src = '/static/Image_tree.jpeg';
-
-
-  var bush_image = new Image();
-  bush_image.src = '/static/Image_bush.jpeg';
-
-  var bandage_image = new Image();
-  bandage_image.src = '/static/Image_bandage.jpeg';
-
-  var ammo_image = new Image();
-  ammo_image.src = '/static/Image_ammo.jpeg';
 
   function create_Elements(elements, image)
   {
