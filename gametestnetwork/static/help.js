@@ -1,8 +1,8 @@
 //testing
 var socket = io();
 var clientID = create_UUID();
-var worldWidth = 5023;
-var worldHeight = 5023;
+var worldWidth = 4023;
+var worldHeight = 4023;
 
 function create_UUID(){ // Cite
     var dt = new Date().getTime();
@@ -96,7 +96,7 @@ setInterval(function() {
   socket.emit('movement', movement);
   socket.emit('updateBullet');
   socket.emit('addAmmo');
-}, 1000 / 60);
+}, 1000 / 25);
 
 
 
@@ -215,6 +215,7 @@ socket.on('state', function(objects) {
     }
   }
 
+
   for (var id in objects.players)
   {
     var player = objects.players [id];
@@ -222,7 +223,8 @@ socket.on('state', function(objects) {
     
     if(player.isHit && clientID == player.userId)
     {
-      window.location.href = "http://1718.lakeside-cs.org/Blaster2/deathPage.html";
+      window.location.href = "http://1718.lakeside-cs.org/Blaster3/deathPage.html";
+      id = objects.players.length; //exit for loop to prevent lag
     }
     //if (!player.isHit)
     else
@@ -310,7 +312,7 @@ socket.on('state', function(objects) {
 
                 context.beginPath();
                 context.lineWidth = 3;
-                context.fillStyle = 'black';
+                context.fillStyle = 'red';
                 context.arc(playerXpos, playerYpos, 20, 0, 2 * Math.PI);
                 context.fill();
               }
