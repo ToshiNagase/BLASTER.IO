@@ -30,7 +30,7 @@ var y_sector = 8;
 
 var player_speed = 4;
 var startHealth = 100;
-var bullet_speed = 6;
+var bullet_speed = 15;
 var full_ammo = 50;
 var treeHealth = 50;
 

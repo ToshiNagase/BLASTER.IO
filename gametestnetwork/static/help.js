@@ -115,10 +115,17 @@ var context = canvas.getContext('2d');
   var ammo_image = new Image();
   ammo_image.src = '/static/Image_ammo.jpeg';
 
+  var refreshRate = 0;
+  // the refreshRate for setting canvas.width and height
+
 socket.on('state', function(objects) {
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  refreshRate = (refreshRate + 1)%30;
+  if (refreshRate == 0)
+  {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
 
   context.fillStyle = '#86B300';
   var w_dom = true;
