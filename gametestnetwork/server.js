@@ -8,33 +8,29 @@ var app = express();
 var server = http.Server(app);
 var io = socketIO(server);
 
-app.set('port', 4000);
+app.set('port', 5000);
 app.use('/static', express.static(__dirname + '/static'));
 // Routing
 app.get('/', function(request, response) {
   response.sendFile(path.join(__dirname, 'index.html'));
 });
 // Starts the server.
-server.listen(4000, function() {
-  console.log('Starting server on port 4000');
+server.listen(5000, function() {
+  console.log('Starting server on port 5000');
 });
 
 // Add the WebSocket handlers
 io.on('connection', function(socket) {
 });
 
-var worldWidth = 4000;
-var worldHeight = 4000;
+var worldWidth = 5000;
+var worldHeight = 5000;
 var x_sector = 8;
 var y_sector = 8;
 
-//testing code
-var player_speed = 10;
-bullet_speed = 18;
-
-//var player_speed = 4;
+var player_speed = 4;
 var startHealth = 100;
-//var bullet_speed = 15;
+var bullet_speed = 15;
 var full_ammo = 50;
 var treeHealth = 50;
 
@@ -43,7 +39,7 @@ var players = {}; // Player object
 var bullets = []; // Bullet array
 
 var trees =[];
-var tree_num = 3;
+var tree_num = 5;
 
 var bandages = [];
 var bandage_num = 2;
@@ -361,4 +357,4 @@ io.on('connection', function(socket) {
 
 setInterval(function() {
   io.sockets.emit('state', objects); // Infinite loop
-}, 1000/25);
+}, 1000/50);
