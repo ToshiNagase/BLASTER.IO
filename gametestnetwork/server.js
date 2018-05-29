@@ -23,8 +23,8 @@ server.listen(5000, function() {
 io.on('connection', function(socket) {
 });
 
-var worldWidth = 3000;
-var worldHeight = 3000;
+var worldWidth = 5000;
+var worldHeight = 5000;
 var x_sector = 8;
 var y_sector = 8;
 
