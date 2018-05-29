@@ -1,8 +1,8 @@
 //testing
 var socket = io();
 var clientID = create_UUID();
-var worldWidth = 5023;
-var worldHeight = 5023;
+var worldWidth = 3023;
+var worldHeight = 3023;
 
 function create_UUID(){ // Cite
     var dt = new Date().getTime();
