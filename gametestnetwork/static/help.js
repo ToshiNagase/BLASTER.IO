@@ -1,10 +1,68 @@
-//testing
-var socket = io();
-var clientID = create_UUID();
-var worldWidth = 4023;
-var worldHeight = 4023;
+// Adapted/cobbled together from
+// https://hackernoon.com/how-to-build-a-multiplayer-browser-game-4a793818c29b
+// http://danielnill.com/nodejs-tutorial-with-socketio
+// https://www.quora.com/How-do-you-write-HTML-in-a-JavaScript-file
+// https://medium.com/@noufel.gouirhate/build-a-simple-chat-app-with-node-js-and-socket-io-ea716c093088
+// https://modernweb.com/building-multiplayer-games-with-node-js-and-socket-io/
+// https://www.w3schools.com/colors/colors_picker.asp
 
-function create_UUID(){ // Cite
+var socket = io();
+
+// Unique client ID
+var clientID = create_UUID();
+
+// Sizing variables
+var player_radius = 20;
+var player_outline = 3;
+
+var bullet_width = 5;
+var bullet_height = 5;
+
+var worldWidth = 4000 + player_radius + player_outline;
+var worldHeight = 4000 + player_radius + player_outline;
+
+var frame_time = 1000/25; // Time per frame
+var refresh_thresold = 30; // How often to check the new window size
+
+// Self-explanatory
+var grass_color = '#86B300';
+var player_color = '#FAD7A0';
+var bullet_color = 'black';
+var enemy_color = 'red';
+var ocean_color = '#00CCFF'; // Don't question it
+
+// For the health bar
+var low_health_color = 'red';
+var med_health_color = 'yellow';
+var high_health_color = 'green';
+var full_health_color = 'blue';
+
+// For the text
+var text_color = 'black';
+var font_size = 30;
+var font_type = '30px Arial';
+var text_buffer = 10;
+
+// Variables for scaling
+var canvas_ratio = 0.55;
+var bullet_range = 100;
+
+// Also for the health bar
+
+var low_health = 30;
+var med_health = 70;
+var high_health = 90;
+
+var label_length = 140;
+var health_bar_height = 20;
+var health_buffer = 8;
+var health_length_constant = 0.005;
+
+// Because it makes sense
+var margin_color = 'black';
+
+// Copied from https://www.w3resource.com/javascript-exercises/javascript-math-exercise-23.php
+function create_UUID(){
     var dt = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (dt + Math.random()*16)%16 | 0;
@@ -14,6 +72,7 @@ function create_UUID(){ // Cite
     return uuid;
 }
 
+// Adpated from https://stackoverflow.com/questions/7702461/socket-io-custom-client-id
 socket.on('connect', function (data)
 {
   socket.emit('storeClientInfo',
@@ -26,6 +85,7 @@ socket.on('name', function(data) {
   // data is a parameter containing whatever data was sent
 });
 
+// Should it be moving in a given direction? variable
 var movement = {
   up: false,
   down: false,
@@ -33,9 +93,9 @@ var movement = {
   right: false
 };
 
-var mousePos = [];
+var mousePos = []; // Mouse clicks array
 
-
+// Add a new bullet that travel in the direction of the mouse click relative to the player
 document.addEventListener("mousedown", function(event){
   mousePos [mousePos.length] =
   {
@@ -49,7 +109,7 @@ document.addEventListener("mousedown", function(event){
 
 });
 
-
+// Move inituitively according to WASD
 document.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
     case 65: // A
@@ -70,6 +130,7 @@ document.addEventListener('keydown', function(event) {
   }
 });
 
+// Stop moving in a direction once a key is no longer pressed
 document.addEventListener('keyup', function(event) {
   switch (event.keyCode) {
     case 65: // A
@@ -90,16 +151,18 @@ document.addEventListener('keyup', function(event) {
   }
 });
 
+// Each client has a new player associated with it
 socket.emit('new player', clientID);
 
+// Update game according to frame_time
 setInterval(function() {
   socket.emit('movement', movement);
   socket.emit('updateBullet');
   socket.emit('addAmmo');
-}, 1000 / 25);
+}, frame_time);
 
 
-
+// Create canvas
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 
@@ -120,27 +183,28 @@ var context = canvas.getContext('2d');
 
 socket.on('state', function(objects) {
 
-  refreshRate = (refreshRate + 1)%30;
+  refreshRate = (refreshRate + 1) % refresh_thresold;
   if (refreshRate == 0)
   {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
 
-  context.fillStyle = '#86B300';
-  var w_dom = true;
-  var x_length;
-  var y_length;
-  var wx_min;
-  var wx_max;
-  var wy_min;
-  var wy_max;
-  var margin;
+  context.fillStyle = grass_color;
+  var w_dom = true; // Does the width dominate the height
+  var x_length; // x-length of game
+  var y_length; // y-length of game
+  var wx_min; // Game x-min
+  var wx_max; // Game x-max
+  var wy_min; // Game y-min
+  var wy_max; // Game y-max
+  var margin; // margin length
 
-  if (0.55 * canvas.width < canvas.height)
+  // Check ratios
+  if (canvas_ratio * canvas.width < canvas.height)
   {
     x_length = canvas.width;
-    y_length = 0.55 * canvas.width;
+    y_length = canvas_ratio * canvas.width;
     margin = (canvas.height - y_length) / 2;
 
     context.fillRect(0, margin, x_length, y_length);
@@ -148,7 +212,7 @@ socket.on('state', function(objects) {
 
   else
   {
-    x_length = canvas.height / 0.55;
+    x_length = canvas.height / canvas_ratio;
     y_length = canvas.height;
     margin = (canvas.width - x_length) / 2;
 
@@ -156,6 +220,10 @@ socket.on('state', function(objects) {
     w_dom = false;
   }
 
+  /*
+    Currently only used for bush, but this method is intended to make
+    it easy to create any object that can't be eliminated from the game
+  */
   function create_Elements(elements, image)
   {
     for (i = 0; i < elements.length; i++)
@@ -179,16 +247,24 @@ socket.on('state', function(objects) {
             thing.y = thing.realY - wy_min;
           }
 
+          // Draw where specified
           context.drawImage(image, thing.x, thing.y, thing.width, thing.height);
         }
       }
   }
 
+  /*
+    Currently used for trees, ammo and bandages.
+    This method checks if an object is still in
+    the game and creates it as necessary.
+  */
   function regenerative_Elements(elements, image)
   {
     for (i = 0; i < elements.length; i++)
     {
       var thing = elements [i];
+      // Note: Thing, element, and object are all used
+      // because this needs to work for multiple stuffs
 
       if (!thing.isUsed)
       {
@@ -226,7 +302,7 @@ socket.on('state', function(objects) {
       window.location.href = "http://1718.lakeside-cs.org/Blaster3/deathPage.html";
       id = objects.players.length; //exit for loop to prevent lag
     }
-    //if (!player.isHit)
+
     else
     {
       wx_min = player.realX - x_length/2;
@@ -234,8 +310,9 @@ socket.on('state', function(objects) {
       wy_min = player.realY - y_length/2;
       wy_max = player.realY + y_length/2;
 
-      if (clientID == player.userId)
+      if (clientID == player.userId) // Draw stuff only from player's perspective
       {
+        // Check if trees are alive
         for (i = 0; i < objects.trees.length; i++)
         {
           if (objects.trees [i].health <= 0)
@@ -244,25 +321,28 @@ socket.on('state', function(objects) {
           }
         }
 
+        // Generate trees, ammo and bandages
         regenerative_Elements(objects.trees, tree_image);
         regenerative_Elements(objects.bandages, bandage_image);
         regenerative_Elements(objects.ammo, ammo_image);
 
+        // Generate player
         context.beginPath();
-        context.lineWidth = 3;
-        context.arc(window.innerWidth/2, window.innerHeight/2, 20, 0, 2 * Math.PI);
-        context.fillStyle = '#FAD7A0';
+        context.lineWidth = player_outline;
+        context.arc(window.innerWidth/2, window.innerHeight/2, player_radius, 0, 2 * Math.PI);
+        context.fillStyle = player_color;
         context.fill();
         
+        // Make bullets
         for (i = 0; i < objects.bullets.length; i++)
         {
           if (objects.bullets [i].exists)
           {
             var bullet = objects.bullets [i];
 
-            if ((bullet.realX + 100 > wx_min) &&
+            if ((bullet.realX + bullet_range > wx_min) &&
             (bullet.realX < wx_max) &&
-            (bullet.realY + 100 > wy_min) &&
+            (bullet.realY + bullet_range > wy_min) &&
             (bullet.realY < wy_max))
             {
               if (w_dom)
@@ -277,12 +357,13 @@ socket.on('state', function(objects) {
                 bullet.y = bullet.realY - wy_min;
               }
 
-              context.fillStyle = 'black';              
-              context.fillRect(bullet.x, bullet.y, 5, 5);
+              context.fillStyle = bullet_color;              
+              context.fillRect(bullet.x, bullet.y, bullet_width, bullet_height);
             }
           }
         }
 
+        // Draw other players with a different color
         for (var id in objects.players)
         {
           var drawing = objects.players [id];
@@ -293,10 +374,10 @@ socket.on('state', function(objects) {
               var playerXpos;
               var playerYpos;
 
-              if ((drawing.realX + 20 > wx_min) &&
-              (drawing.realX - 20 < wx_max) &&
-              (drawing.realY + 20 > wy_min) &&
-              (drawing.realY - 20 < wy_max))
+              if ((drawing.realX + player_radius > wx_min) &&
+              (drawing.realX - player_radius < wx_max) &&
+              (drawing.realY + player_radius > wy_min) &&
+              (drawing.realY - player_radius < wy_max))
               {
                 if (w_dom)
                 {
@@ -311,20 +392,24 @@ socket.on('state', function(objects) {
                 }
 
                 context.beginPath();
-                context.lineWidth = 3;
-                context.fillStyle = 'red';
-                context.arc(playerXpos, playerYpos, 20, 0, 2 * Math.PI);
+                context.lineWidth = player_outline;
+                context.fillStyle = enemy_color;
+                context.arc(playerXpos, playerYpos, player_radius, 0, 2 * Math.PI);
                 context.fill();
               }
             }
           }
         }
 
+        // Bushes cover everything by design
         create_Elements(objects.bushes, bush_image);
 
-        context.fillStyle = '#00CCFF';
+        context.fillStyle = ocean_color;
+        // Player can't walk into ocean b/c we
+        // needed borders and that makes sense
 
-        if (w_dom)
+        // Add ocean borders
+        if (w_dom) // Width dominating height will largely affect borders
         {
           if (player.realX - (x_length / 2) <= 0)
           {
@@ -375,6 +460,7 @@ socket.on('state', function(objects) {
 
         }
 
+        // Number of players left
         var survivors = 0;
         for (var id in objects.players)
         {
@@ -384,58 +470,75 @@ socket.on('state', function(objects) {
           }
         }
 
-        context.fillStyle = 'black';
-        context.font = '30px Arial';
+        context.fillStyle = text_color;
+        context.font = font_type;
         
+        // Add text to let the player know what's happening
         if (w_dom)
         {
-          context.fillText("PLAYERS LEFT: " + survivors, 10, margin + 40);
+          context.fillText("PLAYERS LEFT: " + survivors,
+          text_buffer, margin + font_size + text_buffer);
+
           context.fillText("<" + Math.floor(player.realX) + ", " +
-          (worldHeight - Math.floor(player.realY)) + ">", 10, margin + 80);
-          context.fillText("AMMO: " + player.ammo, 10, margin + y_length - 40);
-          context.fillText("HEALTH: ", 10, margin + y_length - 10);
+          (worldHeight - Math.floor(player.realY)) + ">", text_buffer,
+          margin + 2*(font_size + text_buffer));
+
+          context.fillText("AMMO: " + player.ammo, text_buffer,
+          margin + y_length - (font_size + text_buffer));
+
+          context.fillText("HEALTH: ", text_buffer, margin + y_length - text_buffer);
         }
 
         else
         {
-          context.fillText("PLAYERS LEFT: " + survivors, margin + 10, 40);
+          context.fillText("PLAYERS LEFT: " + survivors,
+          margin + text_buffer, (font_size + text_buffer));
+
           context.fillText("<" + Math.floor(player.realX) + ", " +
-          (worldHeight - Math.floor(player.realY)) + ">", margin + 10, 80);
-          context.fillText("AMMO: " + player.ammo, margin + 10, y_length - 40);
-          context.fillText("HEALTH: ", margin + 10, y_length - 10);
+          (worldHeight - Math.floor(player.realY)) + ">", margin +
+          text_buffer, 2*(font_size + text_buffer));
+
+          context.fillText("AMMO: " + player.ammo,
+          margin + text_buffer, y_length - (font_size + text_buffer));
+
+          context.fillText("HEALTH: ", margin + text_buffer, y_length - text_buffer);
         }
 
-        if (player.health <= 30)
+        // Health bar color changes
+        if (player.health <= low_health)
         {
-          context.fillStyle = 'red';
+          context.fillStyle = low_health_color;
         }
 
-        else if (player.health <= 70)
+        else if (player.health <= med_health)
         {
-          context.fillStyle = 'yellow';
+          context.fillStyle = med_health_color;
         }
 
-        else if (player.health <= 90)
+        else if (player.health <= high_health)
         {
-          context.fillStyle = 'green';
+          context.fillStyle = high_health_color;
         }
 
         else
         {
-          context.fillStyle = 'blue';
+          context.fillStyle = full_health_color;
         }
 
+        // Create margins
         if (w_dom)
         {
-          context.fillRect(140, margin + y_length - 28, 0.005 * player.health * x_length, 20);
+          context.fillRect(label_length, margin + y_length - health_bar_height - health_buffer,
+          health_length_constant * player.health * x_length, health_bar_height);
         }
 
         else
         {
-          context.fillRect(margin + 140, y_length - 28, 0.005 * player.health * x_length, 20);
+          context.fillRect(margin + label_length, y_length - health_bar_height - health_buffer,
+          health_length_constant * player.health * x_length, health_bar_height);
         }
 
-        context.fillStyle = 'black';
+        context.fillStyle = margin_color;
         if (w_dom)
         {
           context.fillRect(0, 0, canvas.width, margin);
