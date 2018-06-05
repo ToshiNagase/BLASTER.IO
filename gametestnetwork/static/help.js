@@ -299,7 +299,7 @@ socket.on('state', function(objects) {
     
     if(player.isHit && clientID == player.userId)
     {
-      window.location.href = "http://1718.lakeside-cs.org/Blaster3/deathPage.html";
+      window.location.href = "/static/HtmlPages/deathPage.html";
       id = objects.players.length; //exit for loop to prevent lag
     }
 
